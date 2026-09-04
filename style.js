@@ -12,14 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // =========================
-    // IMAGE / CAMERA
+    // IMAGE UPLOAD / PREVIEW
     // =========================
 
     imageInput.addEventListener("change", function () {
 
         const file = this.files[0];
 
-        if (!file) return;
+        if (!file) {
+            return;
+        }
 
         if (!file.type.startsWith("image/")) {
             alert("Please select an image.");
@@ -27,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Show selected image
         const imageURL = URL.createObjectURL(file);
 
         preview.src = imageURL;
@@ -37,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
             uploadContent.style.display = "none";
         }
 
-        // Enable Analyze button
         analyzeButton.disabled = false;
         analyzeButton.innerHTML = "🔍 Analyze Product";
     });
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const file = imageInput.files[0];
 
         if (!file) {
-            alert("Please upload or capture an image first.");
+            alert("Please upload an image first.");
             return;
         }
 
@@ -62,53 +62,59 @@ document.addEventListener("DOMContentLoaded", function () {
         analyzeButton.innerHTML = "⏳ Analyzing...";
 
         const formData = new FormData();
-formData.append("file", file);
+        formData.append("file", file);
 
-fetch("http://127.0.0.1:8000/upload", {
-    method: "POST",
-    body: formData
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error("Server error: " + response.status);
-    }
+        fetch("http://127.0.0.1:8000/upload", {
+            method: "POST",
+            body: formData
+        })
 
-    return response.json();
-})
-.then(data => {
+        .then(function (response) {
 
-    console.log("FastAPI Response:", data);
+            if (!response.ok) {
+                throw new Error("Server error: " + response.status);
+            }
 
-    // Save image for result page preview
-    const reader = new FileReader();
+            return response.json();
+        })
 
-    reader.onload = function (event) {
+        .then(function (data) {
 
-        localStorage.setItem(
-            "scannedImage",
-            event.target.result
-        );
+            console.log("FastAPI Response:", data);
 
-        // Save FastAPI result
-        localStorage.setItem(
-            "scanResult",
-            JSON.stringify(data)
-        );
+            const reader = new FileReader();
 
-        window.location.href = "result.html";
-    };
+            reader.onload = function (event) {
 
-    reader.readAsDataURL(file);
-})
-.catch(error => {
+                localStorage.setItem(
+                    "scannedImage",
+                    event.target.result
+                );
 
-    console.error("Upload failed:", error);
+                localStorage.setItem(
+                    "scanResult",
+                    JSON.stringify(data)
+                );
 
-    alert("Unable to connect to FastAPI. Make sure the backend is running.");
+                window.location.href = "result.html";
+            };
 
-    analyzeButton.disabled = false;
-    analyzeButton.innerHTML = "🔍 Analyze Product";
-});
+            reader.readAsDataURL(file);
+        })
+
+        .catch(function (error) {
+
+            console.error("Upload failed:", error);
+
+            alert(
+                "Unable to connect to FastAPI. Make sure the backend is running."
+            );
+
+            analyzeButton.disabled = false;
+            analyzeButton.innerHTML = "🔍 Analyze Product";
+        });
+
+    });
 
 
     // =========================
@@ -133,6 +139,7 @@ fetch("http://127.0.0.1:8000/upload", {
             analyzeButton.disabled = true;
             analyzeButton.innerHTML = "🔍 Analyze Product";
         });
+
     }
 
 });
