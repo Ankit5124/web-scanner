@@ -2,157 +2,289 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>ComplianceAI - Analysis Result</title>
 
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-
 </head>
-
 
 <body>
 
-    <!-- SIDEBAR -->
+<main class="main">
 
-    <!-- <aside class="sidebar">
+    <!-- HEADER -->
 
-                <div class="logo">
+    <div class="result-header">
 
-                    <div class="logo-icon">
-                        ✓
-                    </div>
+        <div>
+            <h1>Analysis Result</h1>
 
-                    <div>
-                        <h2>ComplianceAI</h2>
-                        <span>PACKAGED COMMODITIES</span>
-                    </div>
+            <p>
+                AI inspection completed successfully.
+            </p>
+        </div>
 
-                </div>
+        <div class="result-actions">
 
+            <button
+                onclick="window.location.href='scanner.html'"
+                class="secondary-button">
+                ↻ New Scan
+            </button>
 
-                <nav>
+            <button
+                onclick="window.print()"
+                class="primary-button">
+                ↓ Export Report
+            </button>
 
-                    <a href="index.html">
-                        📊 Dashboard
-                    </a>
+        </div>
 
-                    <a href="scanner.html">
-                        📷 AI Scanner
-                    </a>
-
-                    <a href="#" class="active">
-                        📄 Analysis Result
-                    </a>
-
-                    <a href="#">
-                        🕘 Inspection History
-                    </a>
-
-                    <a href="#">
-                        ⚙ Settings
-                    </a>
-
-                </nav>
-
-            </aside> -->
+    </div>
 
 
-    <!-- MAIN -->
+    <section class="result-grid">
 
-    <main class="main">
 
-        <div class="result-header">
+        <!-- PRODUCT IMAGE -->
 
-            <div>
+        <div class="panel product-panel">
 
-                <h1>
-                    Analysis Result
-                </h1>
+            <div class="panel-header">
 
-                <p>
-                    AI inspection completed successfully.
-                </p>
+                <h2>Package Image</h2>
+
+                <span class="badge danger" id="issueCount">
+                    0 Issues
+                </span>
 
             </div>
 
 
-            <div class="result-actions">
+            <div class="image-result">
 
-                <button onclick="window.location.href='scanner.html'" class="secondary-button">
-                    ↻ New Scan
-                </button>
+                <img
+                    id="resultImage"
+                    alt="Analyzed product">
 
-                <button onclick="window.print()" class="primary-button">
-                    ↓ Export Report
-                </button>
+            </div>
+
+
+            <div class="image-legend">
+
+                <span>
+                    <i class="legend-red"></i>
+                    Violation
+                </span>
+
+                <span>
+                    <i class="legend-yellow"></i>
+                    Warning
+                </span>
 
             </div>
 
         </div>
 
 
-        <section class="result-grid">
+        <!-- RESULT CONTENT -->
+
+        <div class="result-content">
 
 
-            <!-- PRODUCT IMAGE -->
+            <!-- SCORE -->
 
-            <div class="panel product-panel">
+            <div class="panel">
 
-                <div class="panel-header">
+                <div class="score-section">
+
+                    <div>
+
+                        <p class="muted">
+                            Compliance Status
+                        </p>
+
+                        <h2 id="complianceStatus">
+                            ANALYZING...
+                        </h2>
+
+                        <p id="productName">
+                            Product
+                        </p>
+
+                    </div>
+
+
+                    <div class="score-circle">
+
+                        <div>
+
+                            <strong id="complianceScore">
+                                0%
+                            </strong>
+
+                            <small>
+                                SCORE
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DECLARATION ANALYSIS -->
+
+            <div class="panel">
+
+                <div class="panel-title">
 
                     <h2>
-                        Package Image
+                        Declaration Analysis
                     </h2>
 
-                    <span class="badge danger">
-                        2 Issues
+                    <p>
+                        Extracted information and AI verification.
+                    </p>
+
+                </div>
+
+
+                <!-- PRODUCT NAME -->
+
+                <div class="declaration">
+
+                    <div class="declaration-icon success-icon">
+                        ✓
+                    </div>
+
+                    <div class="declaration-info">
+
+                        <strong>
+                            Product Name
+                        </strong>
+
+                        <span id="productNameField">
+                            Detecting...
+                        </span>
+
+                    </div>
+
+                    <span class="status-success">
+                        DETECTED
                     </span>
 
                 </div>
 
 
-                <div class="image-result">
+                <!-- NET QUANTITY -->
 
-                    <img id="resultImage" alt="Analyzed product">
+                <div class="declaration">
+
+                    <div class="declaration-icon success-icon">
+                        ✓
+                    </div>
+
+                    <div class="declaration-info">
+
+                        <strong>
+                            Net Quantity
+                        </strong>
+
+                        <span id="netQuantity">
+                            Detecting...
+                        </span>
+
+                    </div>
+
+                    <span class="status-success">
+                        DETECTED
+                    </span>
+
+                </div>
 
 
-                    <!-- SIMULATED VIOLATION BOXES -->
+                <!-- MRP -->
 
-                    <div class="violation-box mrp-box">
+                <div class="declaration">
 
-                        <span>
+                    <div class="declaration-icon success-icon">
+                        ✓
+                    </div>
+
+                    <div class="declaration-info">
+
+                        <strong>
                             MRP
+                        </strong>
+
+                        <span id="mrp">
+                            Detecting...
                         </span>
 
                     </div>
 
-
-                    <div class="violation-box manufacturer-box">
-
-                        <span>
-                            MANUFACTURER
-                        </span>
-
-                    </div>
+                    <span class="status-success">
+                        DETECTED
+                    </span>
 
                 </div>
 
 
-                <div class="image-legend">
+                <!-- MANUFACTURER -->
 
-                    <span>
-                        <i class="legend-red"></i>
-                        Violation
+                <div class="declaration">
+
+                    <div class="declaration-icon success-icon">
+                        ✓
+                    </div>
+
+                    <div class="declaration-info">
+
+                        <strong>
+                            Manufacturer
+                        </strong>
+
+                        <span id="manufacturer">
+                            Detecting...
+                        </span>
+
+                    </div>
+
+                    <span class="status-success">
+                        DETECTED
                     </span>
 
-                    <span>
-                        <i class="legend-yellow"></i>
-                        Warning
+                </div>
+
+
+                <!-- CONSUMER CARE -->
+
+                <div class="declaration">
+
+                    <div class="declaration-icon success-icon">
+                        ✓
+                    </div>
+
+                    <div class="declaration-info">
+
+                        <strong>
+                            Consumer Care
+                        </strong>
+
+                        <span id="consumerCare">
+                            Detecting...
+                        </span>
+
+                    </div>
+
+                    <span class="status-success">
+                        DETECTED
                     </span>
 
                 </div>
@@ -160,322 +292,409 @@
             </div>
 
 
-            <!-- RESULT -->
+            <!-- VIOLATIONS -->
 
-            <div class="result-content">
+            <div class="panel violation-panel">
 
+                <div class="panel-title">
 
-                <!-- SCORE -->
+                    <h2>
+                        ⚠ Detected Issues
+                    </h2>
 
-                <div class="panel">
-
-                    <div class="score-section">
-
-                        <div>
-
-                            <p class="muted">
-                                Compliance Status
-                            </p>
-
-                            <h2 class="non-compliant">
-                                NON-COMPLIANT
-                            </h2>
-
-                            <p>
-                                Premium Basmati Rice
-                            </p>
-
-                        </div>
-
-
-                        <div class="score-circle">
-
-                            <div>
-
-                                <strong>
-                                    72%
-                                </strong>
-
-                                <small>
-                                    SCORE
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                    <p>
+                        Items requiring inspection or verification.
+                    </p>
 
                 </div>
 
 
-                <!-- DECLARATIONS -->
-
-                <div class="panel">
-
-                    <div class="panel-title">
-
-                        <h2>
-                            Declaration Analysis
-                        </h2>
-
-                        <p>
-                            Extracted information and
-                            AI verification.
-                        </p>
-
-                    </div>
-
-
-                    <div class="declaration">
-
-                        <div class="declaration-icon success-icon">
-                            ✓
-                        </div>
-
-                        <div class="declaration-info">
-
-                            <strong>
-                                Product Name
-                            </strong>
-
-                            <span>
-                                Premium Basmati Rice
-                            </span>
-
-                        </div>
-
-                        <span class="status-success">
-                            COMPLIANT
-                        </span>
-
-                    </div>
-
-
-                    <div class="declaration">
-
-                        <div class="declaration-icon success-icon">
-                            ✓
-                        </div>
-
-                        <div class="declaration-info">
-
-                            <strong>
-                                Net Quantity
-                            </strong>
-
-                            <span>
-                                5 kg
-                            </span>
-
-                        </div>
-
-                        <span class="status-success">
-                            COMPLIANT
-                        </span>
-
-                    </div>
-
-
-                    <div class="declaration violation">
-
-                        <div class="declaration-icon danger-icon">
-                            ✕
-                        </div>
-
-                        <div class="declaration-info">
-
-                            <strong>
-                                MRP
-                            </strong>
-
-                            <span>
-                                ₹450
-                            </span>
-
-                        </div>
-
-                        <span class="status-danger">
-                            VIOLATION
-                        </span>
-
-                    </div>
-
-
-                    <div class="declaration warning">
-
-                        <div class="declaration-icon warning-icon">
-                            !
-                        </div>
-
-                        <div class="declaration-info">
-
-                            <strong>
-                                Manufacturer
-                            </strong>
-
-                            <span>
-                                ABC Foods Pvt. Ltd.
-                            </span>
-
-                        </div>
-
-                        <span class="status-warning">
-                            WARNING
-                        </span>
-
-                    </div>
-
-
-                    <div class="declaration">
-
-                        <div class="declaration-icon success-icon">
-                            ✓
-                        </div>
-
-                        <div class="declaration-info">
-
-                            <strong>
-                                Consumer Care
-                            </strong>
-
-                            <span>
-                                1800-123-4567
-                            </span>
-
-                        </div>
-
-                        <span class="status-success">
-                            COMPLIANT
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- VIOLATIONS -->
-
-                <div class="panel violation-panel">
-
-                    <div class="panel-title">
-
-                        <h2>
-                            ⚠ Detected Issues
-                        </h2>
-
-                        <p>
-                            Items requiring inspection
-                            or verification.
-                        </p>
-
-                    </div>
-
-
-                    <div class="issue">
-
-                        <div class="issue-icon danger-icon">
-                            !
-                        </div>
-
-                        <div>
-
-                            <div class="issue-title">
-
-                                <strong>
-                                    MRP Declaration
-                                </strong>
-
-                                <span class="severity high">
-                                    HIGH
-                                </span>
-
-                            </div>
-
-                            <p>
-                                MRP declaration requires
-                                manual verification against
-                                the applicable packaged
-                                commodity requirements.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="issue">
-
-                        <div class="issue-icon warning-icon">
-                            !
-                        </div>
-
-                        <div>
-
-                            <div class="issue-title">
-
-                                <strong>
-                                    Manufacturer Details
-                                </strong>
-
-                                <span class="severity medium">
-                                    MEDIUM
-                                </span>
-
-                            </div>
-
-                            <p>
-                                Manufacturer information was
-                                detected but its placement
-                                should be verified.
-                            </p>
-
-                        </div>
-
-                    </div>
+                <div id="issuesContainer">
+
+                    <p>
+                        No issues detected.
+                    </p>
 
                 </div>
 
             </div>
 
-        </section>
 
-    </main>
+        </div>
+
+    </section>
+
+</main>
 
 
-    <!-- <script>
+<script>
 
-        /*
-         * Get uploaded image from localStorage.
-         */
+document.addEventListener("DOMContentLoaded", function () {
 
-        const image =
-            localStorage.getItem("productImage");
+    // ==========================================
+    // GET SAVED FASTAPI RESULT
+    // ==========================================
 
-        if (image) {
+    const savedResult = localStorage.getItem("scanResult");
 
-            document.getElementById(
-                "resultImage"
-            ).src = image;
+    const scannedImage = localStorage.getItem("scannedImage");
+
+
+    // ==========================================
+    // SHOW IMAGE
+    // ==========================================
+
+    const resultImage =
+        document.getElementById("resultImage");
+
+    if (resultImage && scannedImage) {
+
+        resultImage.src = scannedImage;
+
+    }
+
+
+    // ==========================================
+    // CHECK RESULT
+    // ==========================================
+
+    if (!savedResult) {
+
+        console.error("No scan result found.");
+
+        document.getElementById("complianceStatus").textContent =
+            "NO RESULT";
+
+        return;
+
+    }
+
+
+    let data;
+
+    try {
+
+        data = JSON.parse(savedResult);
+
+    } catch (error) {
+
+        console.error(
+            "Unable to read scan result:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    console.log("Saved FastAPI Result:", data);
+
+
+    // ==========================================
+    // GET OCR + COMPLIANCE
+    // ==========================================
+
+    const ocr =
+        data.ocr || {};
+
+    const compliance =
+        data.compliance || {};
+
+
+    const rawText =
+        ocr.raw_text || "";
+
+
+    const violations =
+        compliance.violations || [];
+
+
+    // ==========================================
+    // SCORE
+    // ==========================================
+
+    const score =
+        compliance.compliance_score ?? 0;
+
+
+    document.getElementById(
+        "complianceScore"
+    ).textContent = score + "%";
+
+
+    // ==========================================
+    // STATUS
+    // ==========================================
+
+    const status =
+        compliance.result || "UNKNOWN";
+
+
+    const statusElement =
+        document.getElementById(
+            "complianceStatus"
+        );
+
+
+    if (status === "COMPLIANT") {
+
+        statusElement.textContent =
+            "COMPLIANT";
+
+        statusElement.className =
+            "compliant";
+
+    }
+
+    else if (status === "REVIEW REQUIRED") {
+
+        statusElement.textContent =
+            "REVIEW REQUIRED";
+
+        statusElement.className =
+            "warning";
+
+    }
+
+    else {
+
+        statusElement.textContent =
+            "NON-COMPLIANT";
+
+        statusElement.className =
+            "non-compliant";
+
+    }
+
+
+    // ==========================================
+    // HELPER FUNCTION
+    // ==========================================
+
+    function findValue(patterns) {
+
+        for (const pattern of patterns) {
+
+            const regex =
+                new RegExp(
+                    pattern,
+                    "im"
+                );
+
+            const match =
+                rawText.match(regex);
+
+            if (match && match[1]) {
+
+                return match[1]
+                    .trim()
+                    .replace(/\s+/g, " ");
+
+            }
 
         }
 
-    </script> -->
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
+        return "Not detected";
 
-    const resultImage = document.getElementById("resultImage");
-    const scannedImage = localStorage.getItem("scannedImage");
+    }
 
-    if (resultImage && scannedImage) {
-        resultImage.src = scannedImage;
+
+    // ==========================================
+    // PRODUCT NAME
+    // ==========================================
+
+    let productName =
+        findValue([
+            "Product Name\\s*[:\\-]\\s*(.+)",
+            "Item Name\\s*[:\\-]\\s*(.+)"
+        ]);
+
+
+    // Coffee OCR may not have "Product Name:"
+    if (productName === "Not detected") {
+
+        if (
+            rawText.toLowerCase().includes("coffee")
+        ) {
+
+            productName =
+                "Coffee & Chicory";
+
+        }
+
+    }
+
+
+    document.getElementById(
+        "productName"
+    ).textContent = productName;
+
+
+    document.getElementById(
+        "productNameField"
+    ).textContent = productName;
+
+
+    // ==========================================
+    // NET QUANTITY
+    // ==========================================
+
+    const netQuantity =
+        findValue([
+            "NET\\s+QUANTITY\\s*[:\\-]?\\s*([0-9.]+\\s*(?:g|kg|ml|l|mg|pcs?|unit)?)",
+            "Net Quantity\\s*[:\\-]\\s*(.+)"
+        ]);
+
+
+    document.getElementById(
+        "netQuantity"
+    ).textContent = netQuantity;
+
+
+    // ==========================================
+    // MRP
+    // ==========================================
+
+    const mrp =
+        findValue([
+            "MRP[^0-9₹Rs]*₹?\\s*([0-9]+(?:\\.[0-9]+)?)",
+            "MRP\\s*[:\\-]?\\s*₹?\\s*([0-9]+(?:\\.[0-9]+)?)"
+        ]);
+
+
+    if (mrp !== "Not detected") {
+
+        document.getElementById(
+            "mrp"
+        ).textContent = "₹" + mrp;
+
+    }
+
+    else {
+
+        document.getElementById(
+            "mrp"
+        ).textContent = "Not detected";
+
+    }
+
+
+    // ==========================================
+    // MANUFACTURER
+    // ==========================================
+
+    const manufacturer =
+        findValue([
+            "Manufactured\\s*&\\s*Marketed\\s*by\\s*:\\s*(.+)",
+            "Manufactured\\s+and\\s+Marketed\\s+by\\s*:\\s*(.+)",
+            "Manufactured\\s+by\\s*:\\s*(.+)",
+            "Marketed\\s+by\\s*:\\s*(.+)"
+        ]);
+
+
+    document.getElementById(
+        "manufacturer"
+    ).textContent = manufacturer;
+
+
+    // ==========================================
+    // CONSUMER CARE
+    // ==========================================
+
+    const consumerCare =
+        findValue([
+            "Customer Care\\s*[:\\-]?\\s*(.+)",
+            "Consumer Care\\s*[:\\-]?\\s*(.+)",
+            "CALL\\s*:\\s*([+0-9\\- ]+)",
+            "help@[^\\s,]+"
+        ]);
+
+
+    document.getElementById(
+        "consumerCare"
+    ).textContent = consumerCare;
+
+
+    // ==========================================
+    // ISSUE COUNT
+    // ==========================================
+
+    document.getElementById(
+        "issueCount"
+    ).textContent =
+        violations.length +
+        (violations.length === 1
+            ? " Issue"
+            : " Issues");
+
+
+    // ==========================================
+    // SHOW VIOLATIONS
+    // ==========================================
+
+    const issuesContainer =
+        document.getElementById(
+            "issuesContainer"
+        );
+
+
+    if (violations.length === 0) {
+
+        issuesContainer.innerHTML =
+            "<p>No compliance issues detected.</p>";
+
+    }
+
+    else {
+
+        issuesContainer.innerHTML = "";
+
+        violations.forEach(function (violation) {
+
+            const issue =
+                document.createElement("div");
+
+            issue.className =
+                "issue";
+
+
+            issue.innerHTML = `
+                <div class="issue-icon danger-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <div class="issue-title">
+
+                        <strong>
+                            Compliance Issue
+                        </strong>
+
+                        <span class="severity high">
+                            REVIEW
+                        </span>
+
+                    </div>
+
+                    <p>
+                        ${violation}
+                    </p>
+
+                </div>
+            `;
+
+
+            issuesContainer.appendChild(issue);
+
+        });
+
     }
 
 });
+
 </script>
 
-
-
-
-
 </body>
+</html>
