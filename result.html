@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ComplianceAI - Analysis Result</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+
+</head>
+
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <!-- <aside class="sidebar">
+
+                <div class="logo">
+
+                    <div class="logo-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <h2>ComplianceAI</h2>
+                        <span>PACKAGED COMMODITIES</span>
+                    </div>
+
+                </div>
+
+
+                <nav>
+
+                    <a href="index.html">
+                        📊 Dashboard
+                    </a>
+
+                    <a href="scanner.html">
+                        📷 AI Scanner
+                    </a>
+
+                    <a href="#" class="active">
+                        📄 Analysis Result
+                    </a>
+
+                    <a href="#">
+                        🕘 Inspection History
+                    </a>
+
+                    <a href="#">
+                        ⚙ Settings
+                    </a>
+
+                </nav>
+
+            </aside> -->
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="result-header">
+
+            <div>
+
+                <h1>
+                    Analysis Result
+                </h1>
+
+                <p>
+                    AI inspection completed successfully.
+                </p>
+
+            </div>
+
+
+            <div class="result-actions">
+
+                <button onclick="window.location.href='scanner.html'" class="secondary-button">
+                    ↻ New Scan
+                </button>
+
+                <button onclick="window.print()" class="primary-button">
+                    ↓ Export Report
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <section class="result-grid">
+
+
+            <!-- PRODUCT IMAGE -->
+
+            <div class="panel product-panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        Package Image
+                    </h2>
+
+                    <span class="badge danger">
+                        2 Issues
+                    </span>
+
+                </div>
+
+
+                <div class="image-result">
+
+                    <img id="resultImage" alt="Analyzed product">
+
+
+                    <!-- SIMULATED VIOLATION BOXES -->
+
+                    <div class="violation-box mrp-box">
+
+                        <span>
+                            MRP
+                        </span>
+
+                    </div>
+
+
+                    <div class="violation-box manufacturer-box">
+
+                        <span>
+                            MANUFACTURER
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="image-legend">
+
+                    <span>
+                        <i class="legend-red"></i>
+                        Violation
+                    </span>
+
+                    <span>
+                        <i class="legend-yellow"></i>
+                        Warning
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div class="result-content">
+
+
+                <!-- SCORE -->
+
+                <div class="panel">
+
+                    <div class="score-section">
+
+                        <div>
+
+                            <p class="muted">
+                                Compliance Status
+                            </p>
+
+                            <h2 class="non-compliant">
+                                NON-COMPLIANT
+                            </h2>
+
+                            <p>
+                                Premium Basmati Rice
+                            </p>
+
+                        </div>
+
+
+                        <div class="score-circle">
+
+                            <div>
+
+                                <strong>
+                                    72%
+                                </strong>
+
+                                <small>
+                                    SCORE
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DECLARATIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-title">
+
+                        <h2>
+                            Declaration Analysis
+                        </h2>
+
+                        <p>
+                            Extracted information and
+                            AI verification.
+                        </p>
+
+                    </div>
+
+
+                    <div class="declaration">
+
+                        <div class="declaration-icon success-icon">
+                            ✓
+                        </div>
+
+                        <div class="declaration-info">
+
+                            <strong>
+                                Product Name
+                            </strong>
+
+                            <span>
+                                Premium Basmati Rice
+                            </span>
+
+                        </div>
+
+                        <span class="status-success">
+                            COMPLIANT
+                        </span>
+
+                    </div>
+
+
+                    <div class="declaration">
+
+                        <div class="declaration-icon success-icon">
+                            ✓
+                        </div>
+
+                        <div class="declaration-info">
+
+                            <strong>
+                                Net Quantity
+                            </strong>
+
+                            <span>
+                                5 kg
+                            </span>
+
+                        </div>
+
+                        <span class="status-success">
+                            COMPLIANT
+                        </span>
+
+                    </div>
+
+
+                    <div class="declaration violation">
+
+                        <div class="declaration-icon danger-icon">
+                            ✕
+                        </div>
+
+                        <div class="declaration-info">
+
+                            <strong>
+                                MRP
+                            </strong>
+
+                            <span>
+                                ₹450
+                            </span>
+
+                        </div>
+
+                        <span class="status-danger">
+                            VIOLATION
+                        </span>
+
+                    </div>
+
+
+                    <div class="declaration warning">
+
+                        <div class="declaration-icon warning-icon">
+                            !
+                        </div>
+
+                        <div class="declaration-info">
+
+                            <strong>
+                                Manufacturer
+                            </strong>
+
+                            <span>
+                                ABC Foods Pvt. Ltd.
+                            </span>
+
+                        </div>
+
+                        <span class="status-warning">
+                            WARNING
+                        </span>
+
+                    </div>
+
+
+                    <div class="declaration">
+
+                        <div class="declaration-icon success-icon">
+                            ✓
+                        </div>
+
+                        <div class="declaration-info">
+
+                            <strong>
+                                Consumer Care
+                            </strong>
+
+                            <span>
+                                1800-123-4567
+                            </span>
+
+                        </div>
+
+                        <span class="status-success">
+                            COMPLIANT
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VIOLATIONS -->
+
+                <div class="panel violation-panel">
+
+                    <div class="panel-title">
+
+                        <h2>
+                            ⚠ Detected Issues
+                        </h2>
+
+                        <p>
+                            Items requiring inspection
+                            or verification.
+                        </p>
+
+                    </div>
+
+
+                    <div class="issue">
+
+                        <div class="issue-icon danger-icon">
+                            !
+                        </div>
+
+                        <div>
+
+                            <div class="issue-title">
+
+                                <strong>
+                                    MRP Declaration
+                                </strong>
+
+                                <span class="severity high">
+                                    HIGH
+                                </span>
+
+                            </div>
+
+                            <p>
+                                MRP declaration requires
+                                manual verification against
+                                the applicable packaged
+                                commodity requirements.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="issue">
+
+                        <div class="issue-icon warning-icon">
+                            !
+                        </div>
+
+                        <div>
+
+                            <div class="issue-title">
+
+                                <strong>
+                                    Manufacturer Details
+                                </strong>
+
+                                <span class="severity medium">
+                                    MEDIUM
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Manufacturer information was
+                                detected but its placement
+                                should be verified.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- <script>
+
+        /*
+         * Get uploaded image from localStorage.
+         */
+
+        const image =
+            localStorage.getItem("productImage");
+
+        if (image) {
+
+            document.getElementById(
+                "resultImage"
+            ).src = image;
+
+        }
+
+    </script> -->
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const resultImage = document.getElementById("resultImage");
+    const scannedImage = localStorage.getItem("scannedImage");
+
+    if (resultImage && scannedImage) {
+        resultImage.src = scannedImage;
+    }
+
+});
+</script>
+
+
+
+
+
+</body>

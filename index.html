@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ComplianceAI - Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="style.js"></script>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">✓</div>
+
+            <div>
+                <h2>ComplianceAI</h2>
+                <span>PACKAGED COMMODITIES</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="index.html" class="active">
+                📊 Dashboard
+            </a>
+
+            <a href="scanner.html">
+                📷 AI Scanner
+            </a>
+
+            <a href="#">
+                📄 Reports
+            </a>
+
+            <a href="#">
+                🕘 Inspection History
+            </a>
+
+            <a href="#">
+                ⚙ Settings
+            </a>
+        </nav>
+
+        <div class="system-status">
+            <strong>🛡 System Status</strong>
+
+            <p>
+                <span class="online-dot"></span>
+                AI services operational
+            </p>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="page-header">
+
+            <div>
+                <h1>Compliance Dashboard</h1>
+
+                <p>
+                    AI-powered packaged commodity inspection system
+                </p>
+            </div>
+
+        </header>
+
+
+        <!-- STAT CARDS -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div>
+                    <p>Total Inspections</p>
+                    <h2>128</h2>
+                    <span class="green">+12%</span>
+                </div>
+
+                <div class="stat-icon blue">
+                    📦
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+                    <p>Compliant</p>
+                    <h2>87%</h2>
+                    <span class="green">+5.4%</span>
+                </div>
+
+                <div class="stat-icon green-bg">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+                    <p>Violations</p>
+                    <h2>23</h2>
+                    <span class="red">-8.2%</span>
+                </div>
+
+                <div class="stat-icon red-bg">
+                    ✕
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+                    <p>AI Accuracy</p>
+                    <h2>94.6%</h2>
+                    <span class="green">+2.1%</span>
+                </div>
+
+                <div class="stat-icon purple">
+                    ◉
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DASHBOARD GRID -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- START INSPECTION -->
+
+            <div class="panel inspection-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Start New Inspection</h2>
+
+                        <p>
+                            Upload a packaged commodity image
+                            for AI analysis.
+                        </p>
+                    </div>
+
+                    <div class="panel-icon">
+                        📷
+                    </div>
+
+                </div>
+
+
+                <a href="scanner.html" class="scanner-box">
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <h3>
+                        Open AI Scanner
+                    </h3>
+
+                    <p>
+                        Analyze MRP, quantity, manufacturer
+                        details and more.
+                    </p>
+
+                    <span class="primary-button">
+                        Start Inspection →
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- COMPLIANCE OVERVIEW -->
+
+            <div class="panel">
+
+                <h2>Compliance Overview</h2>
+
+                <p class="muted">
+                    Last 30 days
+                </p>
+
+
+                <div class="circle-container">
+
+                    <div class="compliance-circle">
+
+                        <div>
+                            <strong>87%</strong>
+                            <small>compliant</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="legend">
+
+                    <div>
+                        <span class="dot green-dot"></span>
+                        Compliant
+
+                        <strong>111</strong>
+                    </div>
+
+                    <div>
+                        <span class="dot red-dot"></span>
+                        Violations
+
+                        <strong>17</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT INSPECTIONS -->
+
+        <section class="panel recent">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>Recent Inspections</h2>
+
+                    <p>
+                        Latest packaged commodity scans
+                    </p>
+                </div>
+
+                <a href="#">
+                    View all
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>Date</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td>Premium Basmati Rice</td>
+                            <td>Today</td>
+                            <td>72%</td>
+                            <td>
+                                <span class="badge danger">
+                                    ✕ NON-COMPLIANT
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Digestive Biscuits</td>
+                            <td>Today</td>
+                            <td>96%</td>
+                            <td>
+                                <span class="badge success">
+                                    ✓ COMPLIANT
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Organic Sugar</td>
+                            <td>Yesterday</td>
+                            <td>91%</td>
+                            <td>
+                                <span class="badge success">
+                                    ✓ COMPLIANT
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Cooking Oil</td>
+                            <td>Yesterday</td>
+                            <td>64%</td>
+                            <td>
+                                <span class="badge danger">
+                                    ✕ NON-COMPLIANT
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+
+
+
+
+
+
+</html>

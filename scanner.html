@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ComplianceAI - AI Scanner</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <!--
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ✓
+            </div>
+
+            <div>
+                <h2>ComplianceAI</h2>
+                <span>PACKAGED COMMODITIES</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="index.html">
+                📊 Dashboard
+            </a>
+
+            <a href="scanner.html" class="active">
+                📷 AI Scanner
+            </a>
+
+            <a href="#">
+                📄 Reports
+            </a>
+
+            <a href="#">
+                🕘 Inspection History
+            </a>
+
+            <a href="#">
+                ⚙ Settings
+            </a>
+
+        </nav>
+
+    </aside>
+    -->
+
+
+    <!-- SYSTEM STATUS -->
+
+    <div class="system-status">
+
+        <strong>
+            🛡 System Status
+        </strong>
+
+        <p>
+            <span class="online-dot"></span>
+            AI services operational
+        </p>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="page-header">
+
+            <h1>
+                AI Product Scanner
+            </h1>
+
+            <p>
+                Upload a packaged commodity image
+                for compliance analysis.
+            </p>
+
+        </header>
+
+
+        <section class="scanner-container">
+
+            <div class="upload-panel">
+
+
+                <!-- UPLOAD AREA -->
+
+                <div id="dropArea" class="drop-area">
+
+                    <div id="uploadContent">
+
+                        <div class="big-upload-icon">
+                            ↑
+                        </div>
+
+                        <h2>
+                            Upload Product Image
+                        </h2>
+
+                        <p>
+                            Drag and drop a packaged commodity
+                            image here, or select an image.
+                        </p>
+
+
+                        <!-- BROWSE IMAGE -->
+
+                        <label class="primary-button upload-button">
+
+                            Browse Image
+
+                            <input
+                                type="file"
+                                id="imageInput"
+                                accept="image/*"
+                            >
+
+                        </label>
+
+
+                        <small>
+                            JPG, PNG or WEBP • Maximum 10 MB
+                        </small>
+
+                    </div>
+
+
+                    <!-- IMAGE PREVIEW -->
+
+                    <img
+                        id="preview"
+                        class="image-preview"
+                        alt="Product Preview"
+                    >
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="scanner-actions">
+
+                    <button
+                        id="resetButton"
+                        class="secondary-button"
+                    >
+                        ↻ Reset
+                    </button>
+
+
+                    <button
+                        id="analyzeButton"
+                        class="primary-button"
+                        disabled
+                    >
+                        🔍 Analyze Product
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI FEATURES -->
+
+            <div class="features">
+
+
+                <!-- COMPUTER VISION -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        👁
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Computer Vision
+                        </h3>
+
+                        <p>
+                            Detect label regions and
+                            package information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OCR -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        Aa
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            OCR Extraction
+                        </h3>
+
+                        <p>
+                            Extract declarations and
+                            product information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RULE ENGINE -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🛡
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Rule Engine
+                        </h3>
+
+                        <p>
+                            Evaluate declarations against
+                            compliance rules.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="style.js"></script>
+
+</body>
+
+</html>
