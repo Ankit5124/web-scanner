@@ -336,7 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================
 
     const savedResult = localStorage.getItem("scanResult");
-
     const scannedImage = localStorage.getItem("scannedImage");
 
 
@@ -344,13 +343,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // SHOW IMAGE
     // ==========================================
 
-    const resultImage =
-        document.getElementById("resultImage");
+    const resultImage = document.getElementById("resultImage");
 
     if (resultImage && scannedImage) {
-
         resultImage.src = scannedImage;
-
     }
 
 
@@ -366,7 +362,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "NO RESULT";
 
         return;
-
     }
 
 
@@ -378,11 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     } catch (error) {
 
-        console.error(
-            "Unable to read scan result:",
-            error
-        );
-
+        console.error("Unable to read scan result:", error);
         return;
 
     }
@@ -395,95 +386,76 @@ document.addEventListener("DOMContentLoaded", function () {
     // GET OCR + COMPLIANCE
     // ==========================================
 
-    const ocr =
-        data.ocr || {};
+    const ocr = data.ocr || {};
+    const compliance = data.compliance || {};
 
-    const compliance =
-        data.compliance || {};
-
-
-    const rawText =
-        ocr.raw_text || "";
-
-
-    const violations =
-        compliance.violations || [];
+    const rawText = ocr.raw_text || "";
+    const violations = compliance.violations || [];
 
 
     // ==========================================
     // SCORE
     // ==========================================
 
-    const score =
-        compliance.compliance_score ?? 0;
+    const score = compliance.compliance_score ?? 0;
 
-
-    document.getElementById(
-        "complianceScore"
-    ).textContent = score + "%";
+    document.getElementById("complianceScore").textContent =
+        score + "%";
 
 
     // ==========================================
     // STATUS
     // ==========================================
 
-    const status =
-        compliance.result || "UNKNOWN";
-
+    const status = compliance.result || "UNKNOWN";
 
     const statusElement =
-        document.getElementById(
-            "complianceStatus"
-        );
+        document.getElementById("complianceStatus");
 
 
     if (status === "COMPLIANT") {
 
-        statusElement.textContent =
-            "COMPLIANT";
-
-        statusElement.className =
-            "compliant";
+        statusElement.textContent = "COMPLIANT";
+        statusElement.className = "compliant";
 
     }
 
     else if (status === "REVIEW REQUIRED") {
 
-        statusElement.textContent =
-            "REVIEW REQUIRED";
-
-        statusElement.className =
-            "warning";
+        statusElement.textContent = "REVIEW REQUIRED";
+        statusElement.className = "warning";
 
     }
 
     else {
 
-        statusElement.textContent =
-            "NON-COMPLIANT";
-
-        statusElement.className =
-            "non-compliant";
+        statusElement.textContent = "NON-COMPLIANT";
+        statusElement.className = "non-compliant";
 
     }
 
 
     // ==========================================
-    // HELPER FUNCTION
+    // CLEAN TEXT
+    // ==========================================
+
+    const lines = rawText
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+
+    // ==========================================
+    // BASIC VALUE FINDER
     // ==========================================
 
     function findValue(patterns) {
 
         for (const pattern of patterns) {
 
-            const regex =
-                new RegExp(
-                    pattern,
-                    "im"
-                );
+            const regex = new RegExp(pattern, "im");
 
-            const match =
-                rawText.match(regex);
+            const match = rawText.match(regex);
 
             if (match && match[1]) {
 
@@ -492,11 +464,89 @@ document.addEventListener("DOMContentLoaded", function () {
                     .replace(/\s+/g, " ");
 
             }
-
         }
 
         return "Not detected";
+    }
 
+
+    // ==========================================
+    // FIND NUMBER AFTER LABEL
+    // Handles:
+    //
+    // MRP: ₹159
+    // MRP ₹159
+    // MRP
+    // 159
+    // ==========================================
+
+    function findNumberAfterLabel(labelPattern) {
+
+        for (let i = 0; i < lines.length; i++) {
+
+            const line = lines[i];
+
+
+            // ------------------------------
+            // SAME LINE
+            // ------------------------------
+
+            const sameLine = line.match(
+                new RegExp(
+                    labelPattern +
+                    "\\s*(?:[:\\-])?\\s*(?:₹|Rs\\.?\\s*)?" +
+                    "([0-9]+(?:\\.[0-9]+)?)",
+                    "i"
+                )
+            );
+
+            if (sameLine && sameLine[1]) {
+
+                return sameLine[1];
+
+            }
+
+
+            // ------------------------------
+            // NEXT LINE
+            // ------------------------------
+
+            if (
+                new RegExp(labelPattern, "i").test(line)
+            ) {
+
+                for (
+                    let j = i + 1;
+                    j < Math.min(i + 4, lines.length);
+                    j++
+                ) {
+
+                    const nextLine = lines[j];
+
+                    // Ignore obvious labels
+                    if (
+                        /^(BATCH|BATCH NO|DATE|PKD|PACK|USE BY|EXPIRY|LIC|LICENCE|LICENSE)/i
+                            .test(nextLine)
+                    ) {
+                        break;
+                    }
+
+
+                    // Accept a line containing only a price
+                    const numberOnly = nextLine.match(
+                        /^(?:₹|Rs\.?\s*)?\s*([0-9]+(?:\.[0-9]+)?)\s*$/
+                    );
+
+                    if (numberOnly && numberOnly[1]) {
+
+                        return numberOnly[1];
+
+                    }
+                }
+            }
+        }
+
+        return "Not detected";
     }
 
 
@@ -504,78 +554,94 @@ document.addEventListener("DOMContentLoaded", function () {
     // PRODUCT NAME
     // ==========================================
 
-    let productName =
-        findValue([
-            "Product Name\\s*[:\\-]\\s*(.+)",
-            "Item Name\\s*[:\\-]\\s*(.+)"
-        ]);
+    let productName = findValue([
+        "Product Name\\s*[:\\-]\\s*(.+)",
+        "Item Name\\s*[:\\-]\\s*(.+)"
+    ]);
 
 
-    // Coffee OCR may not have "Product Name:"
+    // Coffee fallback
     if (productName === "Not detected") {
 
         if (
             rawText.toLowerCase().includes("coffee")
         ) {
 
-            productName =
-                "Coffee & Chicory";
+            productName = "Coffee & Chicory";
 
         }
 
     }
 
 
-    document.getElementById(
-        "productName"
-    ).textContent = productName;
+    document.getElementById("productName").textContent =
+        productName;
 
-
-    document.getElementById(
-        "productNameField"
-    ).textContent = productName;
+    document.getElementById("productNameField").textContent =
+        productName;
 
 
     // ==========================================
     // NET QUANTITY
     // ==========================================
 
-    const netQuantity =
-        findValue([
-            "NET\\s+QUANTITY\\s*[:\\-]?\\s*([0-9.]+\\s*(?:g|kg|ml|l|mg|pcs?|unit)?)",
-            "Net Quantity\\s*[:\\-]\\s*(.+)"
-        ]);
+    let netQuantity = findValue([
+        "NET\\s+QUANTITY\\s*[:\\-]?\\s*([0-9]+(?:\\.[0-9]+)?\\s*(?:g|kg|ml|l|mg|pcs?|units?)?)",
+        "NET\\s+WEIGHT\\s*[:\\-]?\\s*([0-9]+(?:\\.[0-9]+)?\\s*(?:g|kg|ml|l|mg|pcs?|units?)?)"
+    ]);
 
 
-    document.getElementById(
-        "netQuantity"
-    ).textContent = netQuantity;
+    document.getElementById("netQuantity").textContent =
+        netQuantity;
 
 
     // ==========================================
     // MRP
     // ==========================================
 
-    const mrp =
-        findValue([
-            "MRP[^0-9₹Rs]*₹?\\s*([0-9]+(?:\\.[0-9]+)?)",
-            "MRP\\s*[:\\-]?\\s*₹?\\s*([0-9]+(?:\\.[0-9]+)?)"
-        ]);
+    let mrp = findNumberAfterLabel(
+        "MRP(?:\\s*\\([^\\n]*\\))?"
+    );
+
+
+    // Also support:
+    // "For MRP Rs."
+    if (mrp === "Not detected") {
+
+        mrp = findNumberAfterLabel(
+            "For\\s+MRP\\s+(?:Rs\\.?|₹)?"
+        );
+
+    }
+
+
+    const mrpElement =
+        document.getElementById("mrp");
+
+
+    const mrpStatus =
+        document.getElementById("mrpStatus");
 
 
     if (mrp !== "Not detected") {
 
-        document.getElementById(
-            "mrp"
-        ).textContent = "₹" + mrp;
+        mrpElement.textContent = "₹" + mrp;
+
+        if (mrpStatus) {
+            mrpStatus.textContent = "DETECTED";
+            mrpStatus.className = "status-success";
+        }
 
     }
 
     else {
 
-        document.getElementById(
-            "mrp"
-        ).textContent = "Not detected";
+        mrpElement.textContent = "Not detected";
+
+        if (mrpStatus) {
+            mrpStatus.textContent = "NOT DETECTED";
+            mrpStatus.className = "status-warning";
+        }
 
     }
 
@@ -584,45 +650,68 @@ document.addEventListener("DOMContentLoaded", function () {
     // MANUFACTURER
     // ==========================================
 
-    const manufacturer =
-        findValue([
-            "Manufactured\\s*&\\s*Marketed\\s*by\\s*:\\s*(.+)",
-            "Manufactured\\s+and\\s+Marketed\\s+by\\s*:\\s*(.+)",
-            "Manufactured\\s+by\\s*:\\s*(.+)",
-            "Marketed\\s+by\\s*:\\s*(.+)"
-        ]);
+    const manufacturer = findValue([
+        "Manufactured\\s*&\\s*Marketed\\s*by\\s*:?\\s*(.+)",
+        "Manufactured\\s+and\\s+Marketed\\s+by\\s*:?\\s*(.+)",
+        "Mfd\\.\\s*&\\s*Mkt\\.\\s*by\\s*:?\\s*(.+)",
+        "Mfd\\.\\s+and\\s+Mkt\\.\\s+by\\s*:?\\s*(.+)",
+        "Manufactured\\s+by\\s*:?\\s*(.+)",
+        "Marketed\\s+by\\s*:?\\s*(.+)"
+    ]);
 
 
-    document.getElementById(
-        "manufacturer"
-    ).textContent = manufacturer;
+    document.getElementById("manufacturer").textContent =
+        manufacturer;
 
 
     // ==========================================
     // CONSUMER CARE
     // ==========================================
 
-    const consumerCare =
-        findValue([
-            "Customer Care\\s*[:\\-]?\\s*(.+)",
-            "Consumer Care\\s*[:\\-]?\\s*(.+)",
-            "CALL\\s*:\\s*([+0-9\\- ]+)",
-            "help@[^\\s,]+"
-        ]);
+    let consumerCare = findValue([
+        "Customer\\s+Care\\s*[:\\-]?\\s*(.+)",
+        "Consumer\\s+Care\\s*[:\\-]?\\s*(.+)",
+        "Consumer\\s+Support\\s*[:\\-]?\\s*(.+)",
+        "Toll\\s*Free\\s*[:\\-]?\\s*(.+)",
+        "CALL\\s*[:\\-]?\\s*([+0-9\\- ]+)"
+    ]);
 
 
-    document.getElementById(
-        "consumerCare"
-    ).textContent = consumerCare;
+    // Phone number fallback
+    if (consumerCare === "Not detected") {
+
+        const phoneMatch = rawText.match(
+            /(?:\+91[\s\-]?)?[6-9]\d{9}/
+        );
+
+        if (phoneMatch) {
+            consumerCare = phoneMatch[0];
+        }
+    }
+
+
+    // Email fallback
+    if (consumerCare === "Not detected") {
+
+        const emailMatch = rawText.match(
+            /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
+        );
+
+        if (emailMatch) {
+            consumerCare = emailMatch[0];
+        }
+    }
+
+
+    document.getElementById("consumerCare").textContent =
+        consumerCare;
 
 
     // ==========================================
     // ISSUE COUNT
     // ==========================================
 
-    document.getElementById(
-        "issueCount"
-    ).textContent =
+    document.getElementById("issueCount").textContent =
         violations.length +
         (violations.length === 1
             ? " Issue"
@@ -634,9 +723,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================
 
     const issuesContainer =
-        document.getElementById(
-            "issuesContainer"
-        );
+        document.getElementById("issuesContainer");
 
 
     if (violations.length === 0) {
@@ -650,13 +737,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         issuesContainer.innerHTML = "";
 
+
         violations.forEach(function (violation) {
 
             const issue =
                 document.createElement("div");
 
-            issue.className =
-                "issue";
+            issue.className = "issue";
 
 
             issue.innerHTML = `
