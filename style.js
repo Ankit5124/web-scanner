@@ -116,7 +116,204 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+// ==========================================
+// LICENCE NUMBER
+// ==========================================
 
+let licenseNumber = findValue([
+    "Lic\\.?\\s*No\\.?\\s*[:\\-]?\\s*([0-9]{8,15})",
+    "Licence\\s*No\\.?\\s*[:\\-]?\\s*([0-9]{8,15})",
+    "License\\s*No\\.?\\s*[:\\-]?\\s*([0-9]{8,15})",
+    "FSSAI\\s*(?:Lic\\.?|Licence|License)?\\s*(?:No\\.?)?\\s*[:\\-]?\\s*([0-9]{8,15})"
+]);
+
+
+// Fallback: find a licence number near "Lic"
+if (licenseNumber === "Not detected") {
+
+    const licenseMatch = rawText.match(
+        /(?:Lic\.?|Licence|License)[^0-9]{0,30}([0-9]{8,15})/i
+    );
+
+    if (licenseMatch) {
+        licenseNumber = licenseMatch[1];
+    }
+}
+
+
+document.getElementById("licenseNumber").textContent =
+    licenseNumber;
+
+if (licenseNumber === "Not detected") {
+
+    document.getElementById("licenseStatus").textContent =
+        "NOT DETECTED";
+
+    document.getElementById("licenseStatus").className =
+        "status-warning";
+}
+
+
+// ==========================================
+// BATCH NUMBER
+// ==========================================
+
+function findBatchNumber() {
+
+    // Format:
+    // BATCH NO: A177
+    // BATCH NO. A177
+
+    let result = findValue([
+        "BATCH\\s*(?:NO\\.?|NUMBER)\\s*[:\\-]?\\s*([A-Z0-9][A-Z0-9\\-\\/]{2,})",
+        "LOT\\s*(?:NO\\.?|NUMBER)\\s*[:\\-]?\\s*([A-Z0-9][A-Z0-9\\-\\/]{2,})"
+    ]);
+
+    if (result !== "Not detected") {
+        return result;
+    }
+
+
+    // Format:
+    // BATCH NO.
+    // A177
+
+    for (let i = 0; i < lines.length; i++) {
+
+        if (/^(BATCH|BATCH NO\.?|LOT|LOT NO\.?)/i.test(lines[i])) {
+
+            for (
+                let j = i + 1;
+                j < Math.min(i + 3, lines.length);
+                j++
+            ) {
+
+                const candidate = lines[j];
+
+                if (
+                    /^[A-Z0-9][A-Z0-9\-\/]{2,}$/i.test(candidate) &&
+                    !/^(MRP|PKD|PACK|USE|DATE|LIC)/i.test(candidate)
+                ) {
+
+                    return candidate;
+                }
+            }
+        }
+    }
+
+    return "Not detected";
+}
+
+
+const batchNumber = findBatchNumber();
+
+document.getElementById("batchNumber").textContent =
+    batchNumber;
+
+
+if (batchNumber === "Not detected") {
+
+    document.getElementById("batchStatus").textContent =
+        "NOT DETECTED";
+
+    document.getElementById("batchStatus").className =
+        "status-warning";
+}
+
+
+// ==========================================
+// DATE FINDER
+// ==========================================
+
+function findDate(patterns) {
+
+    for (const pattern of patterns) {
+
+        const match = rawText.match(
+            new RegExp(pattern, "im")
+        );
+
+        if (match && match[1]) {
+
+            return match[1]
+                .trim()
+                .replace(/\s+/g, " ");
+        }
+    }
+
+    return "Not detected";
+}
+
+
+// ==========================================
+// PACKED / PACKAGING DATE
+// ==========================================
+
+let packedDate = findDate([
+    "(?:DATE\\s+OF\\s+)?PACKAGING\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
+    "PKD\\.?\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
+    "PACKED\\s+ON\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
+    "PACKING\\s+DATE\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})"
+]);
+
+
+// Month/year format
+if (packedDate === "Not detected") {
+
+    packedDate = findDate([
+        "PKD\\.?\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})",
+        "PACKED\\s+ON\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})"
+    ]);
+}
+
+
+document.getElementById("packedDate").textContent =
+    packedDate;
+
+
+if (packedDate === "Not detected") {
+
+    document.getElementById("packedStatus").textContent =
+        "NOT DETECTED";
+
+    document.getElementById("packedStatus").className =
+        "status-warning";
+}
+
+
+// ==========================================
+// EXPIRY / USE BY DATE
+// ==========================================
+
+let expiryDate = findDate([
+    "DATE\\s+OF\\s+EXPIRY\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
+    "USE\\s+BY\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
+    "EXPIRY\\s+DATE\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
+    "BEST\\s+BEFORE\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})"
+]);
+
+
+if (expiryDate === "Not detected") {
+
+    expiryDate = findDate([
+        "USE\\s+BY\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})",
+        "BEST\\s+BEFORE\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})"
+    ]);
+}
+
+
+document.getElementById("expiryDate").textContent =
+    expiryDate;
+
+
+if (expiryDate === "Not detected") {
+
+    document.getElementById("expiryStatus").textContent =
+        "NOT DETECTED";
+
+    document.getElementById("expiryStatus").className =
+        "status-warning";
+}
     // =========================
     // RESET
     // =========================
