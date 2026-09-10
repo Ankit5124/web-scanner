@@ -2,42 +2,92 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ComplianceAI - Analysis Result</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+    <title>ComplianceAI - Product Result</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
 </head>
+
 
 <body>
 
-<main class="main">
+<!-- SIDEBAR -->
 
-    <!-- HEADER -->
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">✓</div>
+        <span>ComplianceAI</span>
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a href="index.html">
+            <span>▣</span>
+            Dashboard
+        </a>
+
+        <a href="scanner.html" class="active">
+            <span>▦</span>
+            Barcode Scanner
+        </a>
+
+        <a href="#">
+            <span>▤</span>
+            Reports
+        </a>
+
+        <a href="#">
+            <span>◷</span>
+            Inspection History
+        </a>
+
+        <a href="#">
+            <span>⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main-content">
+
 
     <div class="result-header">
 
         <div>
-            <h1>Analysis Result</h1>
+
+            <h1>Product Result</h1>
 
             <p>
-                AI inspection completed successfully.
+                Product information retrieved from the database.
             </p>
+
         </div>
+
 
         <div class="result-actions">
 
             <button
                 onclick="window.location.href='scanner.html'"
-                class="secondary-button">
-                ↻ New Scan
-            </button>
-
-            <button
-                onclick="window.print()"
                 class="primary-button">
-                ↓ Export Report
+
+                New Scan
+
             </button>
 
         </div>
@@ -45,384 +95,215 @@
     </div>
 
 
-    <section class="result-grid">
 
+    <!-- STATUS -->
 
-        <!-- PRODUCT IMAGE -->
+    <section class="product-status-card">
 
-        <div class="panel product-panel">
+        <div>
 
-            <div class="panel-header">
+            <span class="status-label">
+                Compliance Status
+            </span>
 
-                <h2>Package Image</h2>
-
-                <span class="badge danger" id="issueCount">
-                    0 Issues
-                </span>
-
-            </div>
-
-
-            <div class="image-result">
-
-                <img
-                    id="resultImage"
-                    alt="Analyzed product">
-
-            </div>
-
-
-            <div class="image-legend">
-
-                <span>
-                    <i class="legend-red"></i>
-                    Violation
-                </span>
-
-                <span>
-                    <i class="legend-yellow"></i>
-                    Warning
-                </span>
-
-            </div>
+            <h2 id="complianceStatus">
+                Checking...
+            </h2>
 
         </div>
 
 
-        <!-- RESULT CONTENT -->
+        <div>
 
-        <div class="result-content">
+            <span class="status-label">
+                Barcode
+            </span>
 
+            <strong id="barcodeResult">
+                -
+            </strong>
 
-            <!-- SCORE -->
+        </div>
 
-            <div class="panel">
-
-                <div class="score-section">
-
-                    <div>
-
-                        <p class="muted">
-                            Compliance Status
-                        </p>
-
-                        <h2 id="complianceStatus">
-                            ANALYZING...
-                        </h2>
-
-                        <p id="productName">
-                            Product
-                        </p>
-
-                    </div>
+    </section>
 
 
-                    <div class="score-circle">
 
-                        <div>
+    <!-- PRODUCT -->
 
-                            <strong id="complianceScore">
-                                0%
-                            </strong>
+    <section class="result-panel">
 
-                            <small>
-                                SCORE
-                            </small>
+        <div class="panel-header">
 
-                        </div>
+            <h2>Product Information</h2>
 
-                    </div>
+        </div>
 
-                </div>
+
+        <div class="product-details-grid">
+
+
+            <div class="detail-item">
+
+                <span>Product Name</span>
+
+                <strong id="productName">
+                    -
+                </strong>
 
             </div>
 
 
-            <!-- DECLARATION ANALYSIS -->
+            <div class="detail-item">
 
-            <div class="panel">
+                <span>Brand</span>
 
-                <div class="panel-title">
-
-                    <h2>
-                        Declaration Analysis
-                    </h2>
-
-                    <p>
-                        Extracted information and AI verification.
-                    </p>
-
-                </div>
-
-
-                <!-- PRODUCT NAME -->
-
-                <div class="declaration">
-
-                    <div class="declaration-icon success-icon">
-                        ✓
-                    </div>
-
-                    <div class="declaration-info">
-
-                        <strong>
-                            Product Name
-                        </strong>
-
-                        <span id="productNameField">
-                            Detecting...
-                        </span>
-
-                    </div>
-
-                    <span id="mrpStatus" class="status-success">
-    DETECTED
-</span>
-
-                </div>
-
-
-                <!-- NET QUANTITY -->
-
-                <div class="declaration">
-
-                    <div class="declaration-icon success-icon">
-                        ✓
-                    </div>
-
-                    <div class="declaration-info">
-
-                        <strong>
-                            Net Quantity
-                        </strong>
-
-                        <span id="netQuantity">
-                            Detecting...
-                        </span>
-
-                    </div>
-
-                    <span class="status-success">
-                        DETECTED
-                    </span>
-
-                </div>
-
-
-                <!-- MRP -->
-
-                <div class="declaration">
-
-                    <div class="declaration-icon success-icon">
-                        ✓
-                    </div>
-
-                    <div class="declaration-info">
-
-                        <strong>
-                            MRP
-                        </strong>
-
-                        <span id="mrp">
-                            Detecting...
-                        </span>
-
-                    </div>
-
-                    <span class="status-success">
-                        DETECTED
-                    </span>
-
-                </div>
-
-
-                <!-- MANUFACTURER -->
-
-                <div class="declaration">
-
-                    <div class="declaration-icon success-icon">
-                        ✓
-                    </div>
-
-                    <div class="declaration-info">
-
-                        <strong>
-                            Manufacturer
-                        </strong>
-
-                        <span id="manufacturer">
-                            Detecting...
-                        </span>
-
-                    </div>
-
-                    <span class="status-success">
-                        DETECTED
-                    </span>
-
-                </div>
-
-
-                <!-- CONSUMER CARE -->
-                
-
-                <div class="declaration">
-
-                    <div class="declaration-icon success-icon">
-                        ✓
-                    </div>
-
-                    <div class="declaration-info">
-
-                        <strong>
-                            Consumer Care
-                        </strong>
-
-                        <span id="consumerCare">
-                            Detecting...
-                        </span>
-
-                    </div>
-
-                    <span class="status-success">
-                        DETECTED
-                    </span>
-
-                </div>
+                <strong id="brand">
+                    -
+                </strong>
 
             </div>
-            <!-- LICENCE NUMBER -->
-
-<div class="declaration">
-
-    <div class="declaration-icon success-icon">
-        ✓
-    </div>
-
-    <div class="declaration-info">
-
-        <strong>
-            Licence No.
-        </strong>
-
-        <span id="licenseNumber">
-            Detecting...
-        </span>
-
-    </div>
-
-    <span id="licenseStatus" class="status-success">
-        DETECTED
-    </span>
-
-</div>
 
 
-<!-- BATCH NUMBER -->
+            <div class="detail-item">
 
-<div class="declaration">
+                <span>Category</span>
 
-    <div class="declaration-icon success-icon">
-        ✓
-    </div>
+                <strong id="category">
+                    -
+                </strong>
 
-    <div class="declaration-info">
-
-        <strong>
-            Batch No.
-        </strong>
-
-        <span id="batchNumber">
-            Detecting...
-        </span>
-
-    </div>
-
-    <span id="batchStatus" class="status-success">
-        DETECTED
-    </span>
-
-</div>
+            </div>
 
 
-<!-- PACKING DATE -->
+            <div class="detail-item">
 
-<div class="declaration">
+                <span>Net Quantity</span>
 
-    <div class="declaration-icon success-icon">
-        ✓
-    </div>
+                <strong id="netQuantity">
+                    -
+                </strong>
 
-    <div class="declaration-info">
-
-        <strong>
-            Packed / Packaging Date
-        </strong>
-
-        <span id="packedDate">
-            Detecting...
-        </span>
-
-    </div>
-
-    <span id="packedStatus" class="status-success">
-        DETECTED
-    </span>
-
-</div>
+            </div>
 
 
-<!-- EXPIRY DATE -->
+            <div class="detail-item">
 
-<div class="declaration">
+                <span>MRP</span>
 
-    <div class="declaration-icon success-icon">
-        ✓
-    </div>
+                <strong id="mrp">
+                    -
+                </strong>
 
-    <div class="declaration-info">
-
-        <strong>
-            Expiry / Use By
-        </strong>
-
-        <span id="expiryDate">
-            Detecting...
-        </span>
-
-    </div>
-
-    <span id="expiryStatus" class="status-success">
-        DETECTED
-    </span>
-
-</div>
+            </div>
 
 
-            <!-- VIOLATIONS -->
+            <div class="detail-item">
 
-            <div class="panel violation-panel">
+                <span>Batch Number</span>
 
-                <div class="panel-title">
+                <strong id="batchNumber">
+                    -
+                </strong>
 
-                    <h2>
-                        ⚠ Detected Issues
-                    </h2>
-
-                    <p>
-                        Items requiring inspection or verification.
-                    </p>
-
-                </div>
+            </div>
 
 
-                <div id="issuesContainer">
+            <div class="detail-item">
 
-                    <p>
-                        No issues detected.
-                    </p>
+                <span>Manufacturing Date</span>
 
-                </div>
+                <strong id="manufacturingDate">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>Expiry Date</span>
+
+                <strong id="expiryDate">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>FSSAI License</span>
+
+                <strong id="fssaiLicense">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>Manufacturer</span>
+
+                <strong id="manufacturer">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item full-width">
+
+                <span>Manufacturer Address</span>
+
+                <strong id="manufacturerAddress">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>Consumer Care</span>
+
+                <strong id="consumerCare">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>Country of Origin</span>
+
+                <strong id="countryOfOrigin">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item full-width">
+
+                <span>Ingredients</span>
+
+                <strong id="ingredients">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item full-width">
+
+                <span>Nutrition Information</span>
+
+                <strong id="nutritionInfo">
+                    -
+                </strong>
 
             </div>
 
@@ -431,464 +312,271 @@
 
     </section>
 
+
+
+    <!-- BARCODE -->
+
+    <section class="result-panel">
+
+        <div class="panel-header">
+
+            <h2>Barcode Verification</h2>
+
+        </div>
+
+
+        <div class="barcode-result-box">
+
+            <span>
+                Detected Barcode
+            </span>
+
+            <strong id="barcodeLarge">
+                -
+            </strong>
+
+            <p>
+                This barcode was matched against the ComplianceAI product database.
+            </p>
+
+        </div>
+
+    </section>
+
+
 </main>
+
 
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    // ==========================================
-    // GET SAVED FASTAPI RESULT
-    // ==========================================
-
-    const savedResult = localStorage.getItem("scanResult");
-    const scannedImage = localStorage.getItem("scannedImage");
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
 
-    // ==========================================
-    // SHOW IMAGE
-    // ==========================================
-
-    const resultImage = document.getElementById("resultImage");
-
-    if (resultImage && scannedImage) {
-        resultImage.src = scannedImage;
-    }
+        const storedResult =
+            localStorage.getItem("scanResult");
 
 
-    // ==========================================
-    // CHECK RESULT
-    // ==========================================
+        // No result available
 
-    if (!savedResult) {
+        if (!storedResult) {
 
-        console.error("No scan result found.");
+            document.getElementById(
+                "complianceStatus"
+            ).textContent =
+                "No scan result";
 
-        document.getElementById("complianceStatus").textContent =
-            "NO RESULT";
+            return;
 
-        return;
-    }
-
-
-    let data;
-
-    try {
-
-        data = JSON.parse(savedResult);
-
-    } catch (error) {
-
-        console.error("Unable to read scan result:", error);
-        return;
-
-    }
-
-
-    console.log("Saved FastAPI Result:", data);
-
-
-    // ==========================================
-    // GET OCR + COMPLIANCE
-    // ==========================================
-
-    const ocr = data.ocr || {};
-    const compliance = data.compliance || {};
-
-    const rawText = ocr.raw_text || "";
-    const violations = compliance.violations || [];
-
-
-    // ==========================================
-    // SCORE
-    // ==========================================
-
-    const score = compliance.compliance_score ?? 0;
-
-    document.getElementById("complianceScore").textContent =
-        score + "%";
-
-
-    // ==========================================
-    // STATUS
-    // ==========================================
-
-    const status = compliance.result || "UNKNOWN";
-
-    const statusElement =
-        document.getElementById("complianceStatus");
-
-
-    if (status === "COMPLIANT") {
-
-        statusElement.textContent = "COMPLIANT";
-        statusElement.className = "compliant";
-
-    }
-
-    else if (status === "REVIEW REQUIRED") {
-
-        statusElement.textContent = "REVIEW REQUIRED";
-        statusElement.className = "warning";
-
-    }
-
-    else {
-
-        statusElement.textContent = "NON-COMPLIANT";
-        statusElement.className = "non-compliant";
-
-    }
-
-
-    // ==========================================
-    // CLEAN TEXT
-    // ==========================================
-
-    const lines = rawText
-        .split(/\r?\n/)
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
-
-
-    // ==========================================
-    // BASIC VALUE FINDER
-    // ==========================================
-
-    function findValue(patterns) {
-
-        for (const pattern of patterns) {
-
-            const regex = new RegExp(pattern, "im");
-
-            const match = rawText.match(regex);
-
-            if (match && match[1]) {
-
-                return match[1]
-                    .trim()
-                    .replace(/\s+/g, " ");
-
-            }
         }
 
-        return "Not detected";
-    }
+
+        const result =
+            JSON.parse(storedResult);
 
 
-    // ==========================================
-    // FIND NUMBER AFTER LABEL
-    // Handles:
-    //
-    // MRP: ₹159
-    // MRP ₹159
-    // MRP
-    // 159
-    // ==========================================
-
-    function findNumberAfterLabel(labelPattern) {
-
-        for (let i = 0; i < lines.length; i++) {
-
-            const line = lines[i];
+        console.log(
+            "Displaying result:",
+            result
+        );
 
 
-            // ------------------------------
-            // SAME LINE
-            // ------------------------------
+        const product =
+            result.product;
 
-            const sameLine = line.match(
-                new RegExp(
-                    labelPattern +
-                    "\\s*(?:[:\\-])?\\s*(?:₹|Rs\\.?\\s*)?" +
-                    "([0-9]+(?:\\.[0-9]+)?)",
-                    "i"
-                )
+
+        if (!product) {
+
+            document.getElementById(
+                "complianceStatus"
+            ).textContent =
+                "Product data unavailable";
+
+            return;
+
+        }
+
+
+        // -----------------------------------------
+        // BASIC INFORMATION
+        // -----------------------------------------
+
+        setText(
+            "barcodeResult",
+            result.barcode || product.barcode
+        );
+
+        setText(
+            "barcodeLarge",
+            result.barcode || product.barcode
+        );
+
+
+        setText(
+            "productName",
+            product.product_name
+        );
+
+
+        setText(
+            "brand",
+            product.brand
+        );
+
+
+        setText(
+            "category",
+            product.category
+        );
+
+
+        setText(
+            "netQuantity",
+            product.net_quantity
+        );
+
+
+        setText(
+            "mrp",
+            product.mrp !== undefined
+                ? `₹${product.mrp}`
+                : "-"
+        );
+
+
+        setText(
+            "batchNumber",
+            product.batch_number
+        );
+
+
+        setText(
+            "manufacturingDate",
+            product.manufacturing_date
+        );
+
+
+        setText(
+            "expiryDate",
+            product.expiry_date
+        );
+
+
+        setText(
+            "fssaiLicense",
+            product.fssai_license
+        );
+
+
+        setText(
+            "manufacturer",
+            product.manufacturer
+        );
+
+
+        setText(
+            "manufacturerAddress",
+            product.manufacturer_address
+        );
+
+
+        setText(
+            "consumerCare",
+            product.consumer_care
+        );
+
+
+        setText(
+            "ingredients",
+            product.ingredients
+        );
+
+
+        setText(
+            "nutritionInfo",
+            product.nutrition_info
+        );
+
+
+        setText(
+            "countryOfOrigin",
+            product.country_of_origin
+        );
+
+
+        // -----------------------------------------
+        // COMPLIANCE
+        // -----------------------------------------
+
+        const status =
+            product.compliance_status || "Unknown";
+
+
+        const statusElement =
+            document.getElementById(
+                "complianceStatus"
             );
 
-            if (sameLine && sameLine[1]) {
 
-                return sameLine[1];
+        statusElement.textContent =
+            status;
 
-            }
-
-
-            // ------------------------------
-            // NEXT LINE
-            // ------------------------------
-
-            if (
-                new RegExp(labelPattern, "i").test(line)
-            ) {
-
-                for (
-                    let j = i + 1;
-                    j < Math.min(i + 4, lines.length);
-                    j++
-                ) {
-
-                    const nextLine = lines[j];
-
-                    // Ignore obvious labels
-                    if (
-                        /^(BATCH|BATCH NO|DATE|PKD|PACK|USE BY|EXPIRY|LIC|LICENCE|LICENSE)/i
-                            .test(nextLine)
-                    ) {
-                        break;
-                    }
-
-
-                    // Accept a line containing only a price
-                    const numberOnly = nextLine.match(
-                        /^(?:₹|Rs\.?\s*)?\s*([0-9]+(?:\.[0-9]+)?)\s*$/
-                    );
-
-                    if (numberOnly && numberOnly[1]) {
-
-                        return numberOnly[1];
-
-                    }
-                }
-            }
-        }
-
-        return "Not detected";
-    }
-
-
-    // ==========================================
-    // PRODUCT NAME
-    // ==========================================
-
-    let productName = findValue([
-        "Product Name\\s*[:\\-]\\s*(.+)",
-        "Item Name\\s*[:\\-]\\s*(.+)"
-    ]);
-
-
-    // Coffee fallback
-    if (productName === "Not detected") {
 
         if (
-            rawText.toLowerCase().includes("coffee")
+            status.toLowerCase() ===
+            "compliant"
         ) {
 
-            productName = "Coffee & Chicory";
+            statusElement.classList.add(
+                "status-compliant"
+            );
+
+        } else {
+
+            statusElement.classList.add(
+                "status-non-compliant"
+            );
 
         }
 
     }
+);
 
 
-    document.getElementById("productName").textContent =
-        productName;
+// -----------------------------------------
+// HELPER
+// -----------------------------------------
 
-    document.getElementById("productNameField").textContent =
-        productName;
+function setText(
+    elementId,
+    value
+) {
 
-
-    // ==========================================
-    // NET QUANTITY
-    // ==========================================
-
-    let netQuantity = findValue([
-        "NET\\s+QUANTITY\\s*[:\\-]?\\s*([0-9]+(?:\\.[0-9]+)?\\s*(?:g|kg|ml|l|mg|pcs?|units?)?)",
-        "NET\\s+WEIGHT\\s*[:\\-]?\\s*([0-9]+(?:\\.[0-9]+)?\\s*(?:g|kg|ml|l|mg|pcs?|units?)?)"
-    ]);
-
-
-    document.getElementById("netQuantity").textContent =
-        netQuantity;
-
-
-    // ==========================================
-    // MRP
-    // ==========================================
-
-    let mrp = findNumberAfterLabel(
-        "MRP(?:\\s*\\([^\\n]*\\))?"
-    );
-
-
-    // Also support:
-    // "For MRP Rs."
-    if (mrp === "Not detected") {
-
-        mrp = findNumberAfterLabel(
-            "For\\s+MRP\\s+(?:Rs\\.?|₹)?"
+    const element =
+        document.getElementById(
+            elementId
         );
 
+
+    if (!element) {
+        return;
     }
 
 
-    const mrpElement =
-        document.getElementById("mrp");
+    element.textContent =
+        value !== undefined &&
+        value !== null &&
+        value !== ""
+            ? value
+            : "-";
 
-
-    const mrpStatus =
-        document.getElementById("mrpStatus");
-
-
-    if (mrp !== "Not detected") {
-
-        mrpElement.textContent = "₹" + mrp;
-
-        if (mrpStatus) {
-            mrpStatus.textContent = "DETECTED";
-            mrpStatus.className = "status-success";
-        }
-
-    }
-
-    else {
-
-        mrpElement.textContent = "Not detected";
-
-        if (mrpStatus) {
-            mrpStatus.textContent = "NOT DETECTED";
-            mrpStatus.className = "status-warning";
-        }
-
-    }
-
-
-    // ==========================================
-    // MANUFACTURER
-    // ==========================================
-
-    const manufacturer = findValue([
-        "Manufactured\\s*&\\s*Marketed\\s*by\\s*:?\\s*(.+)",
-        "Manufactured\\s+and\\s+Marketed\\s+by\\s*:?\\s*(.+)",
-        "Mfd\\.\\s*&\\s*Mkt\\.\\s*by\\s*:?\\s*(.+)",
-        "Mfd\\.\\s+and\\s+Mkt\\.\\s+by\\s*:?\\s*(.+)",
-        "Manufactured\\s+by\\s*:?\\s*(.+)",
-        "Marketed\\s+by\\s*:?\\s*(.+)"
-    ]);
-
-
-    document.getElementById("manufacturer").textContent =
-        manufacturer;
-
-
-    // ==========================================
-    // CONSUMER CARE
-    // ==========================================
-
-    let consumerCare = findValue([
-        "Customer\\s+Care\\s*[:\\-]?\\s*(.+)",
-        "Consumer\\s+Care\\s*[:\\-]?\\s*(.+)",
-        "Consumer\\s+Support\\s*[:\\-]?\\s*(.+)",
-        "Toll\\s*Free\\s*[:\\-]?\\s*(.+)",
-        "CALL\\s*[:\\-]?\\s*([+0-9\\- ]+)"
-    ]);
-
-
-    // Phone number fallback
-    if (consumerCare === "Not detected") {
-
-        const phoneMatch = rawText.match(
-            /(?:\+91[\s\-]?)?[6-9]\d{9}/
-        );
-
-        if (phoneMatch) {
-            consumerCare = phoneMatch[0];
-        }
-    }
-
-
-    // Email fallback
-    if (consumerCare === "Not detected") {
-
-        const emailMatch = rawText.match(
-            /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
-        );
-
-        if (emailMatch) {
-            consumerCare = emailMatch[0];
-        }
-    }
-
-
-    document.getElementById("consumerCare").textContent =
-        consumerCare;
-
-
-    // ==========================================
-    // ISSUE COUNT
-    // ==========================================
-
-    document.getElementById("issueCount").textContent =
-        violations.length +
-        (violations.length === 1
-            ? " Issue"
-            : " Issues");
-
-
-    // ==========================================
-    // SHOW VIOLATIONS
-    // ==========================================
-
-    const issuesContainer =
-        document.getElementById("issuesContainer");
-
-
-    if (violations.length === 0) {
-
-        issuesContainer.innerHTML =
-            "<p>No compliance issues detected.</p>";
-
-    }
-
-    else {
-
-        issuesContainer.innerHTML = "";
-
-
-        violations.forEach(function (violation) {
-
-            const issue =
-                document.createElement("div");
-
-            issue.className = "issue";
-
-
-            issue.innerHTML = `
-                <div class="issue-icon danger-icon">
-                    !
-                </div>
-
-                <div>
-
-                    <div class="issue-title">
-
-                        <strong>
-                            Compliance Issue
-                        </strong>
-
-                        <span class="severity high">
-                            REVIEW
-                        </span>
-
-                    </div>
-
-                    <p>
-                        ${violation}
-                    </p>
-
-                </div>
-            `;
-
-
-            issuesContainer.appendChild(issue);
-
-        });
-
-    }
-
-});
+}
 
 </script>
 
+
 </body>
+
 </html>
