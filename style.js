@@ -1,342 +1,413 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const imageInput = document.getElementById("imageInput");
-    const preview = document.getElementById("preview");
-    const analyzeButton = document.getElementById("analyzeButton");
-    const resetButton = document.getElementById("resetButton");
-    const uploadContent = document.getElementById("uploadContent");
+    const camera = document.getElementById("camera");
+    const canvas = document.getElementById("captureCanvas");
 
-    if (!imageInput || !preview || !analyzeButton) {
-        console.error("Scanner elements not found.");
-        return;
+    const captureButton = document.getElementById("captureButton");
+    const stopCameraButton = document.getElementById("stopCameraButton");
+
+    const barcodeImageInput =
+        document.getElementById("barcodeImageInput");
+
+    const scanStatus =
+        document.getElementById("scanStatus");
+
+    const loading =
+        document.getElementById("loading");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+
+    // -----------------------------------------
+    // FASTAPI URL
+    // -----------------------------------------
+
+    const API_URL = "http://127.0.0.1:8000";
+
+
+    let cameraStream = null;
+
+
+    // -----------------------------------------
+    // START CAMERA
+    // -----------------------------------------
+
+    async function startCamera() {
+
+        try {
+
+            cameraStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    }
+                },
+                audio: false
+            });
+
+            camera.srcObject = cameraStream;
+
+            scanStatus.textContent =
+                "Camera ready. Point it at the barcode.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            scanStatus.textContent =
+                "Camera could not be started. Use the barcode image option.";
+
+        }
+
     }
 
-    // =========================
-    // IMAGE UPLOAD / PREVIEW
-    // =========================
 
-    imageInput.addEventListener("change", function () {
+    // -----------------------------------------
+    // STOP CAMERA
+    // -----------------------------------------
 
-        const file = this.files[0];
+    function stopCamera() {
 
-        if (!file) {
-            return;
+        if (cameraStream) {
+
+            cameraStream.getTracks().forEach(track => {
+                track.stop();
+            });
+
+            cameraStream = null;
         }
 
-        if (!file.type.startsWith("image/")) {
-            alert("Please select an image.");
-            this.value = "";
-            return;
-        }
+        camera.srcObject = null;
 
-        const imageURL = URL.createObjectURL(file);
+        scanStatus.textContent =
+            "Camera stopped.";
 
-        preview.src = imageURL;
-        preview.style.display = "block";
-
-        if (uploadContent) {
-            uploadContent.style.display = "none";
-        }
-
-        analyzeButton.disabled = false;
-        analyzeButton.innerHTML = "🔍 Analyze Product";
-    });
+    }
 
 
-    // =========================
-    // ANALYZE
-    // =========================
+    // -----------------------------------------
+    // SHOW ERROR
+    // -----------------------------------------
 
-    analyzeButton.addEventListener("click", function (event) {
+    function showError(message) {
 
-        event.preventDefault();
+        errorMessage.textContent = message;
 
-        const file = imageInput.files[0];
+        errorMessage.classList.remove("hidden");
 
-        if (!file) {
-            alert("Please upload an image first.");
-            return;
-        }
+    }
 
-        analyzeButton.disabled = true;
-        analyzeButton.innerHTML = "⏳ Analyzing...";
+
+    // -----------------------------------------
+    // HIDE ERROR
+    // -----------------------------------------
+
+    function hideError() {
+
+        errorMessage.textContent = "";
+
+        errorMessage.classList.add("hidden");
+
+    }
+
+
+    // -----------------------------------------
+    // START LOADING
+    // -----------------------------------------
+
+    function startLoading() {
+
+        loading.classList.remove("hidden");
+
+        captureButton.disabled = true;
+
+        barcodeImageInput.disabled = true;
+
+    }
+
+
+    // -----------------------------------------
+    // STOP LOADING
+    // -----------------------------------------
+
+    function stopLoading() {
+
+        loading.classList.add("hidden");
+
+        captureButton.disabled = false;
+
+        barcodeImageInput.disabled = false;
+
+    }
+
+
+    // -----------------------------------------
+    // SEND IMAGE TO FASTAPI
+    // -----------------------------------------
+
+    async function sendBarcodeImage(blob) {
+
+        hideError();
+
+        startLoading();
+
+        scanStatus.textContent =
+            "Sending barcode image to server...";
+
 
         const formData = new FormData();
-        formData.append("file", file);
 
-        fetch("http://127.0.0.1:8000/upload", {
-            method: "POST",
-            body: formData
-        })
+        formData.append(
+            "file",
+            blob,
+            "barcode.jpg"
+        );
 
-        .then(function (response) {
+
+        try {
+
+            const response = await fetch(
+    `${API_URL}/scan-barcode`,
+    {
+        method: "POST",
+        body: formData
+    }
+);
+
 
             if (!response.ok) {
-                throw new Error("Server error: " + response.status);
+
+                throw new Error(
+                    `Server error: ${response.status}`
+                );
+
             }
 
-            return response.json();
-        })
 
-        .then(function (data) {
+            const result = await response.json();
 
-            console.log("FastAPI Response:", data);
+            console.log("FastAPI result:", result);
 
-            const reader = new FileReader();
 
-            reader.onload = function (event) {
+            // -----------------------------------------
+            // BARCODE NOT DETECTED
+            // -----------------------------------------
 
-                localStorage.setItem(
-                    "scannedImage",
-                    event.target.result
+            if (result.status === "barcode_not_detected") {
+
+                showError(
+                    "No barcode detected. Please place the barcode clearly inside the scanner."
                 );
+
+                stopLoading();
+
+                scanStatus.textContent =
+                    "Barcode not detected.";
+
+                return;
+            }
+
+
+            // -----------------------------------------
+            // PRODUCT NOT FOUND
+            // -----------------------------------------
+
+            if (result.status === "not_found") {
+
+                showError(
+                    `Barcode ${result.barcode} was detected, but this product is not registered in the database.`
+                );
+
+                stopLoading();
+
+                scanStatus.textContent =
+                    "Product not found.";
+
+                return;
+            }
+
+
+            // -----------------------------------------
+            // PRODUCT FOUND
+            // -----------------------------------------
+
+            if (result.status === "found") {
 
                 localStorage.setItem(
                     "scanResult",
-                    JSON.stringify(data)
+                    JSON.stringify(result)
                 );
 
-                window.location.href = "result.html";
-            };
 
-            reader.readAsDataURL(file);
-        })
+                stopCamera();
 
-        .catch(function (error) {
 
-            console.error("Upload failed:", error);
+                scanStatus.textContent =
+                    "Product found!";
 
-            alert(
-                "Unable to connect to FastAPI. Make sure the backend is running."
+
+                window.location.href =
+                    "result.html";
+
+                return;
+            }
+
+
+            // -----------------------------------------
+            // UNKNOWN RESPONSE
+            // -----------------------------------------
+
+            throw new Error(
+                "Unexpected response from server."
             );
 
-            analyzeButton.disabled = false;
-            analyzeButton.innerHTML = "🔍 Analyze Product";
-        });
 
-    });
+        } catch (error) {
 
-// ==========================================
-// LICENCE NUMBER
-// ==========================================
+            console.error(error);
 
-let licenseNumber = findValue([
-    "Lic\\.?\\s*No\\.?\\s*[:\\-]?\\s*([0-9]{8,15})",
-    "Licence\\s*No\\.?\\s*[:\\-]?\\s*([0-9]{8,15})",
-    "License\\s*No\\.?\\s*[:\\-]?\\s*([0-9]{8,15})",
-    "FSSAI\\s*(?:Lic\\.?|Licence|License)?\\s*(?:No\\.?)?\\s*[:\\-]?\\s*([0-9]{8,15})"
-]);
+            showError(
+                "Could not connect to FastAPI. Make sure the backend is running."
+            );
 
+            scanStatus.textContent =
+                "Connection failed.";
 
-// Fallback: find a licence number near "Lic"
-if (licenseNumber === "Not detected") {
+        } finally {
 
-    const licenseMatch = rawText.match(
-        /(?:Lic\.?|Licence|License)[^0-9]{0,30}([0-9]{8,15})/i
-    );
+            stopLoading();
 
-    if (licenseMatch) {
-        licenseNumber = licenseMatch[1];
-    }
-}
+        }
 
-
-document.getElementById("licenseNumber").textContent =
-    licenseNumber;
-
-if (licenseNumber === "Not detected") {
-
-    document.getElementById("licenseStatus").textContent =
-        "NOT DETECTED";
-
-    document.getElementById("licenseStatus").className =
-        "status-warning";
-}
-
-
-// ==========================================
-// BATCH NUMBER
-// ==========================================
-
-function findBatchNumber() {
-
-    // Format:
-    // BATCH NO: A177
-    // BATCH NO. A177
-
-    let result = findValue([
-        "BATCH\\s*(?:NO\\.?|NUMBER)\\s*[:\\-]?\\s*([A-Z0-9][A-Z0-9\\-\\/]{2,})",
-        "LOT\\s*(?:NO\\.?|NUMBER)\\s*[:\\-]?\\s*([A-Z0-9][A-Z0-9\\-\\/]{2,})"
-    ]);
-
-    if (result !== "Not detected") {
-        return result;
     }
 
 
-    // Format:
-    // BATCH NO.
-    // A177
+    // -----------------------------------------
+    // CAPTURE CAMERA IMAGE
+    // -----------------------------------------
 
-    for (let i = 0; i < lines.length; i++) {
+    captureButton.addEventListener(
+        "click",
+        () => {
 
-        if (/^(BATCH|BATCH NO\.?|LOT|LOT NO\.?)/i.test(lines[i])) {
+            hideError();
 
-            for (
-                let j = i + 1;
-                j < Math.min(i + 3, lines.length);
-                j++
+
+            if (!cameraStream) {
+
+                showError(
+                    "Camera is not running."
+                );
+
+                return;
+            }
+
+
+            if (
+                camera.videoWidth === 0 ||
+                camera.videoHeight === 0
             ) {
 
-                const candidate = lines[j];
+                showError(
+                    "Camera is not ready yet."
+                );
 
-                if (
-                    /^[A-Z0-9][A-Z0-9\-\/]{2,}$/i.test(candidate) &&
-                    !/^(MRP|PKD|PACK|USE|DATE|LIC)/i.test(candidate)
-                ) {
-
-                    return candidate;
-                }
-            }
-        }
-    }
-
-    return "Not detected";
-}
-
-
-const batchNumber = findBatchNumber();
-
-document.getElementById("batchNumber").textContent =
-    batchNumber;
-
-
-if (batchNumber === "Not detected") {
-
-    document.getElementById("batchStatus").textContent =
-        "NOT DETECTED";
-
-    document.getElementById("batchStatus").className =
-        "status-warning";
-}
-
-
-// ==========================================
-// DATE FINDER
-// ==========================================
-
-function findDate(patterns) {
-
-    for (const pattern of patterns) {
-
-        const match = rawText.match(
-            new RegExp(pattern, "im")
-        );
-
-        if (match && match[1]) {
-
-            return match[1]
-                .trim()
-                .replace(/\s+/g, " ");
-        }
-    }
-
-    return "Not detected";
-}
-
-
-// ==========================================
-// PACKED / PACKAGING DATE
-// ==========================================
-
-let packedDate = findDate([
-    "(?:DATE\\s+OF\\s+)?PACKAGING\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
-    "PKD\\.?\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
-    "PACKED\\s+ON\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
-    "PACKING\\s+DATE\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})"
-]);
-
-
-// Month/year format
-if (packedDate === "Not detected") {
-
-    packedDate = findDate([
-        "PKD\\.?\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})",
-        "PACKED\\s+ON\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})"
-    ]);
-}
-
-
-document.getElementById("packedDate").textContent =
-    packedDate;
-
-
-if (packedDate === "Not detected") {
-
-    document.getElementById("packedStatus").textContent =
-        "NOT DETECTED";
-
-    document.getElementById("packedStatus").className =
-        "status-warning";
-}
-
-
-// ==========================================
-// EXPIRY / USE BY DATE
-// ==========================================
-
-let expiryDate = findDate([
-    "DATE\\s+OF\\s+EXPIRY\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
-    "USE\\s+BY\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
-    "EXPIRY\\s+DATE\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})",
-    "BEST\\s+BEFORE\\s*[:\\-]?\\s*(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})"
-]);
-
-
-if (expiryDate === "Not detected") {
-
-    expiryDate = findDate([
-        "USE\\s+BY\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})",
-        "BEST\\s+BEFORE\\s*[:\\-]?\\s*([A-Z]{3,9}[\\/\\-]\\d{2,4})"
-    ]);
-}
-
-
-document.getElementById("expiryDate").textContent =
-    expiryDate;
-
-
-if (expiryDate === "Not detected") {
-
-    document.getElementById("expiryStatus").textContent =
-        "NOT DETECTED";
-
-    document.getElementById("expiryStatus").className =
-        "status-warning";
-}
-    // =========================
-    // RESET
-    // =========================
-
-    if (resetButton) {
-
-        resetButton.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            imageInput.value = "";
-
-            preview.src = "";
-            preview.style.display = "none";
-
-            if (uploadContent) {
-                uploadContent.style.display = "block";
+                return;
             }
 
-            analyzeButton.disabled = true;
-            analyzeButton.innerHTML = "🔍 Analyze Product";
-        });
 
-    }
+            canvas.width =
+                camera.videoWidth;
+
+            canvas.height =
+                camera.videoHeight;
+
+
+            const context =
+                canvas.getContext("2d");
+
+
+            context.drawImage(
+                camera,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            canvas.toBlob(
+                blob => {
+
+                    if (blob) {
+
+                        sendBarcodeImage(blob);
+
+                    } else {
+
+                        showError(
+                            "Could not capture barcode image."
+                        );
+
+                    }
+
+                },
+                "image/jpeg",
+                0.95
+            );
+
+        }
+    );
+
+
+    // -----------------------------------------
+    // STOP CAMERA BUTTON
+    // -----------------------------------------
+
+    stopCameraButton.addEventListener(
+        "click",
+        stopCamera
+    );
+
+
+    // -----------------------------------------
+    // IMAGE UPLOAD FALLBACK
+    // -----------------------------------------
+
+    barcodeImageInput.addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            sendBarcodeImage(file);
+
+        }
+    );
+
+
+    // -----------------------------------------
+    // START CAMERA
+    // -----------------------------------------
+
+    startCamera();
+
+
+    // -----------------------------------------
+    // CLEANUP
+    // -----------------------------------------
+
+    window.addEventListener(
+        "beforeunload",
+        stopCamera
+    );
 
 });
