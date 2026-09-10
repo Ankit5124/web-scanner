@@ -2393,3 +2393,99 @@ tbody tr:hover {
         padding: 15px;
     }
 }
+/* =====================================================
+   FINAL RESULT PAGE WIDTH FIX
+===================================================== */
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.result-page {
+    margin-left: 260px !important;
+    width: calc(100vw - 260px) !important;
+    max-width: none !important;
+    padding: 40px !important;
+    overflow-x: hidden;
+}
+
+/* Make every result section fit inside viewport */
+.result-page * {
+    max-width: 100%;
+}
+
+/* Product grid must never create horizontal overflow */
+.clean-product-grid {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* Long values must wrap */
+.clean-detail,
+.clean-value {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.clean-value {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* Result status must fit */
+.result-status {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.barcode-area {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Prevent huge barcode from pushing page */
+.barcode-area strong {
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+
+/* Desktop */
+@media (min-width: 751px) {
+
+    .result-page {
+        box-sizing: border-box;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+
+    .result-page {
+        margin-left: 260px !important;
+        width: calc(100vw - 260px) !important;
+        padding: 30px !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 750px) {
+
+    .result-page {
+        margin-left: 0 !important;
+        width: 100vw !important;
+        padding: 20px 16px !important;
+    }
+
+    .clean-product-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .clean-detail.full {
+        grid-column: auto;
+    }
+}
