@@ -41,7 +41,9 @@ body {
 
     --text: #f8fafc;
     --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
     --muted: #64748b;
+    
 
     --blue: #2563eb;
     --blue-light: #60a5fa;
@@ -2216,4 +2218,178 @@ tbody tr:hover {
         min-height: 280px;
     }
 
+}
+/* =====================================================
+   RESULT PAGE - FINAL LAYOUT FIX
+===================================================== */
+
+.main-content {
+    margin-left: 260px;
+    min-height: 100vh;
+    padding: 42px;
+    width: calc(100% - 260px);
+}
+
+/* Result header */
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+/* Compliance status */
+.product-status-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 30px;
+
+    padding: 25px;
+    margin-bottom: 25px;
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+/* Product information panel */
+.result-panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.result-panel .panel-header {
+    margin-bottom: 20px;
+}
+
+/* Product details */
+.product-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.detail-item {
+    min-width: 0;
+    padding: 18px;
+
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.detail-item span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.detail-item strong {
+    display: block;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Barcode section */
+.barcode-result-box {
+    text-align: center;
+    padding: 25px;
+}
+
+.barcode-result-box span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.barcode-result-box strong {
+    display: block;
+    color: var(--text);
+    font-size: 28px;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+}
+
+.barcode-result-box p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* Compliance colors */
+.status-compliant {
+    color: var(--green-light) !important;
+}
+
+.status-non-compliant {
+    color: var(--red-light) !important;
+}
+
+/* Result page mobile */
+@media (max-width: 1100px) {
+
+    .main-content {
+        padding: 30px;
+    }
+
+    .product-details-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 750px) {
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 22px 16px;
+    }
+
+    .result-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .product-status-card {
+        grid-template-columns: 1fr;
+    }
+
+    .product-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .main-content {
+        padding: 18px 12px;
+    }
+
+    .result-panel {
+        padding: 17px;
+    }
+
+    .detail-item {
+        padding: 15px;
+    }
 }
