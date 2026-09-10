@@ -1,273 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ComplianceAI - AI Scanner</title>
+    <title>ComplianceAI - Barcode Scanner</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
-    <!-- SIDEBAR -->
+<!-- SIDEBAR -->
+<aside class="sidebar">
 
-    <!--
-    <aside class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">✓</div>
+        <span>ComplianceAI</span>
+    </div>
 
-        <div class="logo">
+    <nav class="sidebar-nav">
 
-            <div class="logo-icon">
-                ✓
+        <a href="index.html">
+            <span>▣</span>
+            Dashboard
+        </a>
+
+        <a href="scanner.html" class="active">
+            <span>▦</span>
+            Barcode Scanner
+        </a>
+
+        <a href="#">
+            <span>▤</span>
+            Reports
+        </a>
+
+        <a href="#">
+            <span>◷</span>
+            Inspection History
+        </a>
+
+        <a href="#">
+            <span>⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <div class="scanner-header">
+        <div>
+            <h1>Barcode Scanner</h1>
+            <p>Scan a packaged commodity barcode to retrieve product details.</p>
+        </div>
+    </div>
+
+
+    <section class="scanner-container">
+
+        <div class="upload-panel">
+
+            <div class="scanner-title">
+                <h2>Scan Product</h2>
+                <p>
+                    Point your camera at the product barcode.
+                </p>
             </div>
 
-            <div>
-                <h2>ComplianceAI</h2>
-                <span>PACKAGED COMMODITIES</span>
+
+            <!-- CAMERA -->
+            <div class="camera-container">
+
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline>
+                </video>
+
+                <div class="scanner-frame">
+                    <div class="corner top-left"></div>
+                    <div class="corner top-right"></div>
+                    <div class="corner bottom-left"></div>
+                    <div class="corner bottom-right"></div>
+
+                    <div class="scan-line"></div>
+                </div>
+
             </div>
+
+
+            <p id="scanStatus" class="scan-status">
+                Starting camera...
+            </p>
+
+
+            <div class="scanner-actions">
+
+                <button
+                    type="button"
+                    id="captureButton"
+                    class="primary-button">
+                    Scan Barcode
+                </button>
+
+                <button
+                    type="button"
+                    id="stopCameraButton"
+                    class="secondary-button">
+                    Stop Camera
+                </button>
+
+            </div>
+
+
+            <!-- Hidden canvas used to capture camera image -->
+            <canvas id="captureCanvas" style="display:none;"></canvas>
+
+
+            <!-- FALLBACK -->
+            <div class="manual-section">
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <h3>Use Barcode Image</h3>
+
+                <p>
+                    If camera scanning is unavailable, select a barcode image.
+                </p>
+
+                <input
+                    type="file"
+                    id="barcodeImageInput"
+                    accept="image/*"
+                    capture="environment"
+                >
+
+            </div>
+
+
+            <!-- Loading -->
+            <div id="loading" class="scanner-loading hidden">
+                <div class="loader"></div>
+                <p>Scanning barcode and checking database...</p>
+            </div>
+
+
+            <!-- Error -->
+            <div id="errorMessage" class="scanner-error hidden"></div>
 
         </div>
 
 
-        <nav>
+        <!-- FEATURES -->
 
-            <a href="index.html">
-                📊 Dashboard
-            </a>
+        <div class="features">
 
-            <a href="scanner.html" class="active">
-                📷 AI Scanner
-            </a>
+            <div class="feature-card">
 
-            <a href="#">
-                📄 Reports
-            </a>
-
-            <a href="#">
-                🕘 Inspection History
-            </a>
-
-            <a href="#">
-                ⚙ Settings
-            </a>
-
-        </nav>
-
-    </aside>
-    -->
-
-
-    <!-- SYSTEM STATUS -->
-
-    <div class="system-status">
-
-        <strong>
-            🛡 System Status
-        </strong>
-
-        <p>
-            <span class="online-dot"></span>
-            AI services operational
-        </p>
-
-    </div>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-        <header class="page-header">
-
-            <h1>
-                AI Product Scanner
-            </h1>
-
-            <p>
-                Upload a packaged commodity image
-                for compliance analysis.
-            </p>
-
-        </header>
-
-
-        <section class="scanner-container">
-
-            <div class="upload-panel">
-
-
-                <!-- UPLOAD AREA -->
-
-                <div id="dropArea" class="drop-area">
-
-                    <div id="uploadContent">
-
-                        <div class="big-upload-icon">
-                            ↑
-                        </div>
-
-                        <h2>
-                            Upload Product Image
-                        </h2>
-
-                        <p>
-                            Drag and drop a packaged commodity
-                            image here, or select an image.
-                        </p>
-
-
-                        <!-- BROWSE IMAGE -->
-
-                        <label class="primary-button upload-button">
-
-                            Browse Image
-
-                            <input
-                                type="file"
-                                id="imageInput"
-                                accept="image/*"
-                            >
-
-                        </label>
-
-
-                        <small>
-                            JPG, PNG or WEBP • Maximum 10 MB
-                        </small>
-
-                    </div>
-
-
-                    <!-- IMAGE PREVIEW -->
-
-                    <img
-                        id="preview"
-                        class="image-preview"
-                        alt="Product Preview"
-                    >
-
+                <div class="feature-icon">
+                    📷
                 </div>
 
+                <h3>Camera Scan</h3>
 
-                <!-- BUTTONS -->
-
-                <div class="scanner-actions">
-
-                    <button
-                        id="resetButton"
-                        class="secondary-button"
-                    >
-                        ↻ Reset
-                    </button>
-
-
-                    <button
-                        id="analyzeButton"
-                        class="primary-button"
-                        disabled
-                    >
-                        🔍 Analyze Product
-                    </button>
-
-                </div>
+                <p>
+                    Capture the product barcode directly using your mobile camera.
+                </p>
 
             </div>
 
 
-            <!-- AI FEATURES -->
+            <div class="feature-card">
 
-            <div class="features">
-
-
-                <!-- COMPUTER VISION -->
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        👁
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Computer Vision
-                        </h3>
-
-                        <p>
-                            Detect label regions and
-                            package information.
-                        </p>
-
-                    </div>
-
+                <div class="feature-icon">
+                    🔎
                 </div>
 
+                <h3>Barcode Matching</h3>
 
-                <!-- OCR -->
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        Aa
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            OCR Extraction
-                        </h3>
-
-                        <p>
-                            Extract declarations and
-                            product information.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- RULE ENGINE -->
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        🛡
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Rule Engine
-                        </h3>
-
-                        <p>
-                            Evaluate declarations against
-                            compliance rules.
-                        </p>
-
-                    </div>
-
-                </div>
-
+                <p>
+                    FastAPI identifies the barcode and searches the product database.
+                </p>
 
             </div>
 
-        </section>
 
-    </main>
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                <h3>Product Details</h3>
+
+                <p>
+                    View all available product and compliance information.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
 
 
-    <!-- JAVASCRIPT -->
-
-    <script src="style.js"></script>
+<script src="style.js"></script>
 
 </body>
-
 </html>
