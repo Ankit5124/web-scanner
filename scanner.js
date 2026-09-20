@@ -5,6 +5,15 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    /* ---------------------------------------------------
+       BACKEND CONFIG
+       Change these two lines if your FastAPI route differs.
+    --------------------------------------------------- */
+
+    const API_BASE_URL = "http://127.0.0.1:8000";
+    const SCAN_ENDPOINT = "/scan-barcode";
+    const UPLOAD_FIELD_NAME = "file"; // must match the UploadFile param name in FastAPI
+
     const uploadZone = document.getElementById("uploadZone");
     const productImage = document.getElementById("productImage");
     const uploadContent = document.getElementById("uploadContent");
@@ -13,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const removeImage = document.getElementById("removeImage");
     const startScan = document.getElementById("startScan");
 
-    /* Stop here if this is not the scanner page */
     if (!uploadZone || !productImage) return;
 
     let selectedFile = null;
@@ -73,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     uploadZone.addEventListener("dragleave", function (event) {
-        /* ignore drag-leave fired by child elements */
         if (uploadZone.contains(event.relatedTarget)) return;
         uploadZone.classList.remove("dragging");
     });
@@ -88,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const file = files[0];
 
-        /* keep the <input> in sync with the dropped file */
         try {
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
@@ -125,7 +131,39 @@ document.addEventListener("DOMContentLoaded", function () {
         runScanner();
     });
 
-    /* ---------- PROGRESS SIMULATION ---------- */
+    /* ---------- SEND IMAGE TO BACKEND ---------- */
+
+    function scanProduct(file) {
+
+        const formData = new FormData();
+        formData.append(UPLOAD_FIELD_NAME, file);
+
+        return fetch(API_BASE_URL + SCAN_ENDPOINT, {
+            method: "POST",
+            body: formData
+        }).then(async function (response) {
+
+            let data = null;
+            try {
+                data = await response.json();
+            } catch (parseError) {
+                /* response wasn't JSON */
+            }
+
+            if (!response.ok) {
+                const detail = (data && data.detail) ? data.detail : ("Server error (" + response.status + ")");
+                throw new Error(detail);
+            }
+
+            if (!data || data.status !== "found") {
+                throw new Error("No matching product was found for this image.");
+            }
+
+            return data;
+        });
+    }
+
+    /* ---------- PROGRESS OVERLAY + REAL SCAN ---------- */
 
     function runScanner() {
 
@@ -147,10 +185,24 @@ document.addEventListener("DOMContentLoaded", function () {
         startScan.disabled = true;
 
         let current = 0;
+        let serverSettled = false;
+        let serverResult = null;
+        let serverError = null;
+
+        scanProduct(selectedFile)
+            .then(function (result) { serverResult = result; })
+            .catch(function (error) { serverError = error; })
+            .finally(function () { serverSettled = true; });
 
         const interval = setInterval(function () {
 
-            current++;
+            /* climb to 90% while waiting on the network request,
+               only complete once the backend has actually responded */
+            if (!serverSettled) {
+                current = Math.min(current + 1, 90);
+            } else {
+                current = Math.min(current + 4, 100);
+            }
 
             progress.style.width = current + "%";
             percent.textContent = current + "%";
@@ -159,30 +211,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 message.textContent = "Processing product image...";
                 setStep(steps, 0);
             } else if (current < 50) {
-                message.textContent = "Extracting text using OCR...";
+                message.textContent = "Reading barcode from image...";
                 setStep(steps, 1);
             } else if (current < 75) {
-                message.textContent = "Checking mandatory declarations...";
+                message.textContent = "Looking up product in database...";
                 setStep(steps, 2);
-            } else if (current < 95) {
-                message.textContent = "Analyzing compliance risks...";
+            } else if (current < 100) {
+                message.textContent = "Checking regulatory declarations...";
                 setStep(steps, 3);
             } else {
                 message.textContent = "Generating compliance report...";
             }
 
-            if (current >= 100) {
+            if (current >= 100 && serverSettled) {
                 clearInterval(interval);
-                saveReport();
-                setTimeout(function () {
-                    window.location.href = "result.html";
-                }, 700);
+                finishScan(serverResult, serverError);
             }
 
         }, 50);
     }
 
-    /* Marks earlier steps completed and the current one active */
     function setStep(steps, index) {
         steps.forEach(function (step, i) {
             if (!step) return;
@@ -192,22 +240,38 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* ---------- SAVE RESULT FOR result.html ---------- */
+    function finishScan(result, error) {
 
-    function saveReport() {
+        const overlay = document.getElementById("scanningOverlay");
+
+        if (error || !result) {
+            if (overlay) overlay.classList.remove("show");
+            startScan.disabled = false;
+            alert(
+                "Scan failed: " + (error ? error.message : "Unknown error") +
+                "\n\nMake sure the backend is running at " + API_BASE_URL + " and try again."
+            );
+            return;
+        }
+
+        saveReport(result);
+
+        setTimeout(function () {
+            window.location.href = "result.html";
+        }, 400);
+    }
+
+    /* ---------- SAVE THE REAL BACKEND RESULT ---------- */
+
+    function saveReport(result) {
 
         const report = {
-            productName: "Premium Packaged Commodity",
-            category: "Food & Beverage",
-            mrp: "₹240",
-            quantity: "1 kg",
-            manufacturer: "ABC Foods Pvt. Ltd.",
-            score: 87,
-            confidence: 94.6,
-            status: "COMPLIANT",
+            barcode: result.barcode || (result.product && result.product.barcode) || "",
+            product: result.product || {},
+            image: previewImage ? previewImage.src : "",
             inspectionId: "CAI-" + new Date().getFullYear() + "-" +
                 Math.floor(10000 + Math.random() * 90000),
-            image: previewImage ? previewImage.src : ""
+            scannedAt: new Date().toISOString()
         };
 
         try {
