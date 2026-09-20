@@ -8,10 +8,12 @@
     <title>ComplianceAI - Dashboard</title>
 
     <link rel="stylesheet" href="style.css">
-    <script src="style.js"></script>
 </head>
 
 <body>
+
+    <!-- BACKGROUND EFFECT -->
+    <div class="background-grid"></div>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -20,51 +22,88 @@
             <div class="logo-icon">✓</div>
 
             <div>
-                <h2>ComplianceAI</h2>
-                <span>PACKAGED COMMODITIES</span>
+                <h2>Compliance<span>AI</span></h2>
+                <small>PACKAGED COMMODITIES</small>
             </div>
         </div>
 
         <nav>
+
             <a href="index.html" class="active">
-                📊 Dashboard
+                <span>▦</span>
+                Dashboard
             </a>
 
             <a href="scanner.html">
-                📷 AI Scanner
+                <span>⌾</span>
+                AI Scanner
             </a>
 
             <a href="result.html">
-                📄 Reports
+                <span>▤</span>
+                Reports
             </a>
 
             <a href="#">
-                🕘 Inspection History
+                <span>◷</span>
+                Inspection History
             </a>
 
             <a href="#">
-                ⚙ Settings
+                <span>⚙</span>
+                Settings
             </a>
+
         </nav>
 
+
+        <!-- AI STATUS -->
         <div class="system-status">
-            <strong>🛡 System Status</strong>
+
+            <div class="status-title">
+                <span class="shield">◆</span>
+                <strong>System Status</strong>
+            </div>
 
             <p>
                 <span class="online-dot"></span>
                 AI services operational
             </p>
+
+            <div class="status-line"></div>
+
+            <small>
+                Last system check: <b>Just now</b>
+            </small>
+
+        </div>
+
+
+        <div class="sidebar-footer">
+            <div class="ai-mini">
+                <span>AI</span>
+            </div>
+
+            <div>
+                <strong>Compliance Engine</strong>
+                <small>v2.4.1</small>
+            </div>
         </div>
 
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main class="main">
 
+        <!-- HEADER -->
         <header class="page-header">
 
             <div>
+                <div class="breadcrumb">
+                    OVERVIEW <span>/</span> DASHBOARD
+                </div>
+
                 <h1>Compliance Dashboard</h1>
 
                 <p>
@@ -72,19 +111,49 @@
                 </p>
             </div>
 
+
+            <div class="header-actions">
+
+                <div class="live-status">
+                    <span></span>
+                    LIVE
+                </div>
+
+                <button class="notification">
+                    ◉
+                    <i></i>
+                </button>
+
+                <div class="profile">
+                    <div class="profile-avatar">A</div>
+
+                    <div>
+                        <strong>Admin</strong>
+                        <small>Inspector</small>
+                    </div>
+                </div>
+
+            </div>
+
         </header>
 
 
-        <!-- STAT CARDS -->
-
+        <!-- STATS -->
         <section class="stats">
 
             <div class="stat-card">
 
-                <div>
+                <div class="stat-content">
+
                     <p>Total Inspections</p>
-                    <h2>128</h2>
-                    <span class="green">+12%</span>
+
+                    <h2 data-value="128">0</h2>
+
+                    <span class="trend positive">
+                        ↑ 12%
+                        <small>vs last month</small>
+                    </span>
+
                 </div>
 
                 <div class="stat-icon blue">
@@ -96,10 +165,17 @@
 
             <div class="stat-card">
 
-                <div>
+                <div class="stat-content">
+
                     <p>Compliant</p>
-                    <h2>87%</h2>
-                    <span class="green">+5.4%</span>
+
+                    <h2 data-value="87">0%</h2>
+
+                    <span class="trend positive">
+                        ↑ 5.4%
+                        <small>vs last month</small>
+                    </span>
+
                 </div>
 
                 <div class="stat-icon green-bg">
@@ -111,14 +187,21 @@
 
             <div class="stat-card">
 
-                <div>
+                <div class="stat-content">
+
                     <p>Violations</p>
-                    <h2>23</h2>
-                    <span class="red">-8.2%</span>
+
+                    <h2 data-value="23">0</h2>
+
+                    <span class="trend negative">
+                        ↓ 8.2%
+                        <small>vs last month</small>
+                    </span>
+
                 </div>
 
                 <div class="stat-icon red-bg">
-                    ✕
+                    !
                 </div>
 
             </div>
@@ -126,14 +209,21 @@
 
             <div class="stat-card">
 
-                <div>
+                <div class="stat-content">
+
                     <p>AI Accuracy</p>
-                    <h2>94.6%</h2>
-                    <span class="green">+2.1%</span>
+
+                    <h2 data-value="94.6">0%</h2>
+
+                    <span class="trend positive">
+                        ↑ 2.1%
+                        <small>vs last month</small>
+                    </span>
+
                 </div>
 
                 <div class="stat-icon purple">
-                    ◉
+                    ✦
                 </div>
 
             </div>
@@ -141,28 +231,30 @@
         </section>
 
 
-        <!-- DASHBOARD GRID -->
-
+        <!-- MAIN DASHBOARD GRID -->
         <section class="dashboard-grid">
 
 
             <!-- START INSPECTION -->
-
             <div class="panel inspection-panel">
 
                 <div class="panel-header">
 
                     <div>
+                        <div class="section-label">
+                            AI ANALYSIS
+                        </div>
+
                         <h2>Start New Inspection</h2>
 
                         <p>
                             Upload a packaged commodity image
-                            for AI analysis.
+                            for instant AI analysis.
                         </p>
                     </div>
 
                     <div class="panel-icon">
-                        📷
+                        ⌾
                     </div>
 
                 </div>
@@ -170,8 +262,18 @@
 
                 <a href="scanner.html" class="scanner-box">
 
-                    <div class="upload-icon">
-                        ↑
+                    <div class="scanner-glow"></div>
+
+                    <div class="scanner-animation">
+
+                        <div class="scan-ring"></div>
+
+                        <div class="scan-icon">
+                            ⌾
+                        </div>
+
+                        <div class="scan-line"></div>
+
                     </div>
 
                     <h3>
@@ -179,12 +281,13 @@
                     </h3>
 
                     <p>
-                        Analyze MRP, quantity, manufacturer
-                        details and more.
+                        Detect MRP, quantity, manufacturer details,
+                        expiry information and regulatory violations.
                     </p>
 
                     <span class="primary-button">
-                        Start Inspection →
+                        Start Inspection
+                        <b>→</b>
                     </span>
 
                 </a>
@@ -193,23 +296,41 @@
 
 
             <!-- COMPLIANCE OVERVIEW -->
+            <div class="panel compliance-panel">
 
-            <div class="panel">
+                <div class="panel-header">
 
-                <h2>Compliance Overview</h2>
+                    <div>
+                        <div class="section-label">
+                            PERFORMANCE
+                        </div>
 
-                <p class="muted">
-                    Last 30 days
-                </p>
+                        <h2>Compliance Overview</h2>
+
+                        <p class="muted">
+                            Last 30 days
+                        </p>
+                    </div>
+
+                    <button class="more-button">
+                        ⋮
+                    </button>
+
+                </div>
 
 
                 <div class="circle-container">
 
                     <div class="compliance-circle">
 
-                        <div>
+                        <div class="circle-inner">
+
                             <strong>87%</strong>
-                            <small>compliant</small>
+
+                            <small>
+                                compliant
+                            </small>
+
                         </div>
 
                     </div>
@@ -221,14 +342,23 @@
 
                     <div>
                         <span class="dot green-dot"></span>
-                        Compliant
+
+                        <span>
+                            Compliant
+                            <small>Passed inspections</small>
+                        </span>
 
                         <strong>111</strong>
                     </div>
 
+
                     <div>
                         <span class="dot red-dot"></span>
-                        Violations
+
+                        <span>
+                            Violations
+                            <small>Requires attention</small>
+                        </span>
 
                         <strong>17</strong>
                     </div>
@@ -241,12 +371,15 @@
 
 
         <!-- RECENT INSPECTIONS -->
-
         <section class="panel recent">
 
             <div class="panel-header">
 
                 <div>
+                    <div class="section-label">
+                        ACTIVITY
+                    </div>
+
                     <h2>Recent Inspections</h2>
 
                     <p>
@@ -254,8 +387,8 @@
                     </p>
                 </div>
 
-                <a href="#">
-                    View all
+                <a href="#" class="view-all">
+                    View all →
                 </a>
 
             </div>
@@ -268,10 +401,10 @@
                     <thead>
 
                         <tr>
-                            <th>Product</th>
-                            <th>Date</th>
-                            <th>Score</th>
-                            <th>Status</th>
+                            <th>PRODUCT</th>
+                            <th>DATE</th>
+                            <th>COMPLIANCE SCORE</th>
+                            <th>STATUS</th>
                         </tr>
 
                     </thead>
@@ -280,50 +413,138 @@
                     <tbody>
 
                         <tr>
-                            <td>Premium Basmati Rice</td>
+
+                            <td>
+                                <div class="product-cell">
+                                    <div class="product-icon">🍚</div>
+
+                                    <div>
+                                        <strong>Premium Basmati Rice</strong>
+                                        <small>Food & Beverage</small>
+                                    </div>
+                                </div>
+                            </td>
+
                             <td>Today</td>
-                            <td>72%</td>
+
+                            <td>
+                                <div class="score">
+                                    <div class="score-bar">
+                                        <span style="width:72%"></span>
+                                    </div>
+                                    <strong>72%</strong>
+                                </div>
+                            </td>
+
                             <td>
                                 <span class="badge danger">
-                                    ✕ NON-COMPLIANT
+                                    <i></i>
+                                    NON-COMPLIANT
                                 </span>
                             </td>
+
                         </tr>
 
 
                         <tr>
-                            <td>Digestive Biscuits</td>
+
+                            <td>
+                                <div class="product-cell">
+                                    <div class="product-icon">🍪</div>
+
+                                    <div>
+                                        <strong>Digestive Biscuits</strong>
+                                        <small>Food & Beverage</small>
+                                    </div>
+                                </div>
+                            </td>
+
                             <td>Today</td>
-                            <td>96%</td>
+
+                            <td>
+                                <div class="score">
+                                    <div class="score-bar">
+                                        <span style="width:96%"></span>
+                                    </div>
+                                    <strong>96%</strong>
+                                </div>
+                            </td>
+
                             <td>
                                 <span class="badge success">
-                                    ✓ COMPLIANT
+                                    <i></i>
+                                    COMPLIANT
                                 </span>
                             </td>
+
                         </tr>
 
 
                         <tr>
-                            <td>Organic Sugar</td>
+
+                            <td>
+                                <div class="product-cell">
+                                    <div class="product-icon">🧂</div>
+
+                                    <div>
+                                        <strong>Organic Sugar</strong>
+                                        <small>Food & Beverage</small>
+                                    </div>
+                                </div>
+                            </td>
+
                             <td>Yesterday</td>
-                            <td>91%</td>
+
+                            <td>
+                                <div class="score">
+                                    <div class="score-bar">
+                                        <span style="width:91%"></span>
+                                    </div>
+                                    <strong>91%</strong>
+                                </div>
+                            </td>
+
                             <td>
                                 <span class="badge success">
-                                    ✓ COMPLIANT
+                                    <i></i>
+                                    COMPLIANT
                                 </span>
                             </td>
+
                         </tr>
 
 
                         <tr>
-                            <td>Cooking Oil</td>
+
+                            <td>
+                                <div class="product-cell">
+                                    <div class="product-icon">🛢️</div>
+
+                                    <div>
+                                        <strong>Cooking Oil</strong>
+                                        <small>Food & Beverage</small>
+                                    </div>
+                                </div>
+                            </td>
+
                             <td>Yesterday</td>
-                            <td>64%</td>
+
+                            <td>
+                                <div class="score">
+                                    <div class="score-bar">
+                                        <span style="width:64%"></span>
+                                    </div>
+                                    <strong>64%</strong>
+                                </div>
+                            </td>
+
                             <td>
                                 <span class="badge danger">
-                                    ✕ NON-COMPLIANT
+                                    <i></i>
+                                    NON-COMPLIANT
                                 </span>
                             </td>
+
                         </tr>
 
                     </tbody>
@@ -334,14 +555,21 @@
 
         </section>
 
+
+        <!-- FOOTER -->
+        <footer>
+            <span>© 2026 ComplianceAI</span>
+
+            <span>
+                AI-powered regulatory intelligence
+            </span>
+        </footer>
+
     </main>
 
+
+    <script src="style.js"></script>
+
 </body>
-
-
-
-
-
-
 
 </html>
