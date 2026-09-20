@@ -4,15 +4,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComplianceAI - Inspection Report</title>
+
+    <title>ComplianceAI - Product Result</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           CLEAN RESULT PAGE
+        ========================================= */
+
+        .result-page {
+            margin-left: 260px;
+            min-height: 100vh;
+            padding: 40px;
+            width: calc(100% - 260px);
+        }
+
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .result-top h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+            color: #f8fafc;
+        }
+
+        .result-top p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* STATUS */
+
+        .result-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .status-title {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        #complianceStatus {
+            font-size: 24px;
+            font-weight: 750;
+        }
+
+        .status-compliant {
+            color: #34d399 !important;
+        }
+
+        .status-non-compliant {
+            color: #f87171 !important;
+        }
+
+        .barcode-area {
+            text-align: right;
+        }
+
+        .barcode-area span {
+            display: block;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .barcode-area strong {
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        /* PANEL */
+
+        .clean-result-panel {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .clean-result-panel h2 {
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        /* PRODUCT GRID */
+
+        .clean-product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .clean-detail {
+            background: #111c31;
+            border: 1px solid #1e293b;
+            border-radius: 11px;
+            padding: 17px;
+            min-width: 0;
+        }
+
+        .clean-detail.full {
+            grid-column: 1 / -1;
+        }
+
+        .clean-label {
+            display: block;
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            margin-bottom: 8px;
+        }
+
+        .clean-value {
+            display: block;
+            color: #f8fafc;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        /* BARCODE */
+
+        .barcode-verification {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .barcode-verification .label {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .barcode-verification .number {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .barcode-verification p {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 750px) {
+
+            .result-page {
+                margin-left: 0;
+                width: 100%;
+                padding: 22px 16px;
+            }
+
+            .result-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .result-status {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .barcode-area {
+                text-align: left;
+            }
+
+            .clean-product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .clean-detail.full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .result-page {
+                padding: 18px 12px;
+            }
+
+            .clean-result-panel {
+                padding: 17px;
+            }
+
+            .result-top h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
 </head>
 
 
 <body>
-
-    <div class="background-grid"></div>
-
 
     <!-- SIDEBAR -->
 
@@ -20,24 +230,22 @@
 
         <div class="logo">
             <div class="logo-icon">✓</div>
-            <div>
-                <h2>Compliance<span>AI</span></h2>
-                <small>PACKAGED COMMODITIES</small>
-            </div>
+            <span>ComplianceAI</span>
         </div>
 
-        <nav>
+        <nav class="sidebar-nav">
+
             <a href="index.html">
-                <span>▦</span>
+                <span>▣</span>
                 Dashboard
             </a>
 
-            <a href="scanner.html">
-                <span>⌾</span>
-                AI Scanner
+            <a href="scanner.html" class="active">
+                <span>▦</span>
+                Barcode Scanner
             </a>
 
-            <a href="result.html" class="active">
+            <a href="reports.html">
                 <span>▤</span>
                 Reports
             </a>
@@ -51,310 +259,568 @@
                 <span>⚙</span>
                 Settings
             </a>
+
         </nav>
-
-        <div class="system-status">
-            <div class="status-title">
-                <span class="shield">◆</span>
-                <strong>System Status</strong>
-            </div>
-
-            <p>
-                <span class="online-dot"></span>
-                AI services operational
-            </p>
-
-            <div class="status-line"></div>
-
-            <small>
-                Last system check: <b>Just now</b>
-            </small>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="ai-mini">AI</div>
-            <div>
-                <strong>Compliance Engine</strong>
-                <small>v2.4.1</small>
-            </div>
-        </div>
 
     </aside>
 
 
-
     <!-- MAIN -->
 
-    <main class="main">
+    <main class="result-page">
 
-        <header class="page-header">
+        <!-- HEADER -->
+
+        <div class="result-top">
 
             <div>
-                <div class="breadcrumb">
-                    REPORTS <span>/</span> INSPECTION RESULT
-                </div>
-
-                <h1>Compliance Inspection Report</h1>
+                <h1>Product Result</h1>
 
                 <p>
-                    Backend-verified packaged commodity compliance analysis.
+                    Product information retrieved from the ComplianceAI database.
                 </p>
             </div>
 
-            <div class="report-actions">
-                <button class="secondary-button" id="newScan">
-                    + New Inspection
-                </button>
+            <button
+                class="primary-button"
+                onclick="window.location.href='scanner.html'">
 
-                <button class="primary-report-button" id="printReport">
-                    ↓ Download Report
-                </button>
-            </div>
+                New Scan
 
-        </header>
+            </button>
+
+        </div>
 
 
+        <!-- STATUS -->
 
-        <!-- REPORT SUMMARY -->
+        <section class="result-status">
 
-        <section class="report-summary">
+            <div>
 
-            <!-- SCORE -->
-
-            <div class="panel score-card">
-
-                <div class="section-label">OVERALL RESULT</div>
-
-                <div class="big-score">
-                    <div class="score-circle" id="resultCircle">
-                        <div>
-                            <strong id="resultScore">—%</strong>
-                            <small>COMPLIANCE</small>
-                        </div>
-                    </div>
+                <div class="status-title">
+                    COMPLIANCE STATUS
                 </div>
 
-                <div class="result-status success" id="resultStatus">
-                    <span>✓</span>
-                    PENDING
-                </div>
-
-                <p class="score-description" id="scoreDescription">
-                    Waiting for inspection data.
-                </p>
-
-            </div>
-
-
-            <!-- PRODUCT -->
-
-            <div class="panel product-summary">
-
-                <div class="section-label">PRODUCT INFORMATION</div>
-
-                <div class="product-header">
-                    <div class="result-product-image" id="resultProductImage">
-                        <span>📦</span>
-                    </div>
-
-                    <div>
-                        <h2 id="productName">—</h2>
-                        <p id="productCategory">—</p>
-                    </div>
-                </div>
-
-                <div class="product-details">
-                    <div>
-                        <span>MRP</span>
-                        <strong id="mrp">—</strong>
-                    </div>
-
-                    <div>
-                        <span>Net Quantity</span>
-                        <strong id="quantity">—</strong>
-                    </div>
-
-                    <div>
-                        <span>Manufacturer</span>
-                        <strong id="manufacturer">—</strong>
-                    </div>
-
-                    <div>
-                        <span>Inspection ID</span>
-                        <strong id="inspectionId">—</strong>
-                    </div>
+                <div id="complianceStatus">
+                    Checking...
                 </div>
 
             </div>
 
 
-            <!-- DATABASE MATCH -->
+            <div class="barcode-area">
 
-            <div class="panel confidence-card">
+                <span>
+                    BARCODE
+                </span>
 
-                <div class="section-label">DATABASE MATCH</div>
+                <strong id="barcodeResult">
+                    -
+                </strong>
 
-                <div class="confidence-number">
-                    <strong id="matchBarcode">—</strong>
-                    <span>Barcode matched in registry</span>
+            </div>
+
+        </section>
+
+
+        <!-- PRODUCT INFORMATION -->
+
+        <section class="clean-result-panel">
+
+            <h2>Product Information</h2>
+
+
+            <div class="clean-product-grid">
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Product Name
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="productName">
+                        -
+                    </strong>
+
                 </div>
 
-                <div class="confidence-bar">
-                    <span style="width:100%"></span>
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Brand
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="brand">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Category
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="category">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Net Quantity
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="netQuantity">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        MRP
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="mrp">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Batch Number
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="batchNumber">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Manufacturing Date
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="manufacturingDate">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Expiry Date
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="expiryDate">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        FSSAI License
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="fssaiLicense">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Consumer Care
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="consumerCare">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail full">
+
+                    <span class="clean-label">
+                        Manufacturer
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="manufacturer">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail full">
+
+                    <span class="clean-label">
+                        Manufacturer Address
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="manufacturerAddress">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail full">
+
+                    <span class="clean-label">
+                        Ingredients
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="ingredients">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail full">
+
+                    <span class="clean-label">
+                        Nutrition Information
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="nutritionInfo">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="clean-detail">
+
+                    <span class="clean-label">
+                        Country of Origin
+                    </span>
+
+                    <strong
+                        class="clean-value"
+                        id="countryOfOrigin">
+                        -
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- BARCODE VERIFICATION -->
+
+        <section class="clean-result-panel">
+
+            <h2>Barcode Verification</h2>
+
+            <div class="barcode-verification">
+
+                <div class="label">
+                    DETECTED BARCODE
+                </div>
+
+                <div
+                    class="number"
+                    id="barcodeLarge">
+                    -
                 </div>
 
                 <p>
-                    Product details were retrieved from the compliance
-                    database using the scanned barcode.
+                    This barcode was successfully matched against
+                    the ComplianceAI product database.
                 </p>
 
-                <div class="engine-status">
-                    <span class="online-dot"></span>
-                    Backend verified
-                </div>
-
             </div>
 
         </section>
 
-
-
-        <!-- FULL LABEL DETAILS -->
-
-        <section class="panel details-panel">
-
-            <div class="panel-header">
-                <div>
-                    <div class="section-label">FULL LABEL DATA</div>
-                    <h2>Product & Regulatory Details</h2>
-                    <p>Everything extracted from the label by the backend.</p>
-                </div>
-            </div>
-
-            <div class="details-grid">
-                <div>
-                    <span>Barcode</span>
-                    <strong id="barcode">—</strong>
-                </div>
-
-                <div>
-                    <span>Brand</span>
-                    <strong id="brand">—</strong>
-                </div>
-
-                <div>
-                    <span>Batch Number</span>
-                    <strong id="batchNumber">—</strong>
-                </div>
-
-                <div>
-                    <span>FSSAI License</span>
-                    <strong id="fssai">—</strong>
-                </div>
-
-                <div>
-                    <span>Manufacturing Date</span>
-                    <strong id="mfgDate">—</strong>
-                </div>
-
-                <div>
-                    <span>Expiry Date</span>
-                    <strong id="expiryDateField">—</strong>
-                </div>
-
-                <div>
-                    <span>Country of Origin</span>
-                    <strong id="countryOfOrigin">—</strong>
-                </div>
-
-                <div>
-                    <span>Consumer Care</span>
-                    <strong id="consumerCareDetail">—</strong>
-                </div>
-            </div>
-
-            <div class="details-long">
-                <div>
-                    <span>Manufacturer Address</span>
-                    <p id="manufacturerAddress">—</p>
-                </div>
-
-                <div>
-                    <span>Ingredients</span>
-                    <p id="ingredients">—</p>
-                </div>
-
-                <div>
-                    <span>Nutrition Information</span>
-                    <p id="nutritionInfo">—</p>
-                </div>
-            </div>
-
-        </section>
-
-
-
-        <!-- DETECTION GRID -->
-
-        <section class="panel detection-panel">
-
-            <div class="panel-header">
-                <div>
-                    <div class="section-label">AUTOMATED VALIDATION</div>
-                    <h2>Compliance Checks</h2>
-                    <p>Detailed analysis of mandatory declarations.</p>
-                </div>
-
-                <div class="checks-count" id="checksCount">
-                    <strong>— / —</strong>
-                    <span>checks passed</span>
-                </div>
-            </div>
-
-            <!-- Populated by JS from the backend response -->
-            <div class="checks-grid" id="checksGrid"></div>
-
-        </section>
-
-
-
-        <!-- RISK SECTION -->
-
-        <section class="report-bottom">
-
-            <div class="panel violations-panel">
-                <div class="section-label">RISK ANALYSIS</div>
-                <h2>Detected Issues</h2>
-
-                <!-- Populated by JS from the backend response -->
-                <div id="riskList"></div>
-            </div>
-
-            <div class="panel recommendation-panel">
-                <div class="section-label">AI RECOMMENDATION</div>
-                <div class="recommendation-icon">✦</div>
-                <h2>Manual verification recommended</h2>
-                <p>
-                    Confirm any item flagged for review before approving
-                    this product for final compliance clearance.
-                </p>
-            </div>
-
-        </section>
-
-
-
-        <!-- FOOTER -->
-
-        <footer>
-            <span>© 2026 ComplianceAI</span>
-            <span>Report generated by AI Compliance Engine</span>
-        </footer>
 
     </main>
 
 
-    <script src="style.js"></script>
+    <!-- RESULT SCRIPT -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const storedResult =
+                    localStorage.getItem("scanResult");
+
+
+                if (!storedResult) {
+
+                    document.getElementById(
+                        "complianceStatus"
+                    ).textContent =
+                        "No scan result";
+
+                    return;
+                }
+
+
+                let result;
+
+                try {
+
+                    result =
+                        JSON.parse(storedResult);
+
+                } catch (error) {
+
+                    console.error(
+                        "Invalid scan result:",
+                        error
+                    );
+
+                    document.getElementById(
+                        "complianceStatus"
+                    ).textContent =
+                        "Invalid scan data";
+
+                    return;
+                }
+
+
+                const product =
+                    result.product;
+
+
+                if (!product) {
+
+                    document.getElementById(
+                        "complianceStatus"
+                    ).textContent =
+                        "Product data unavailable";
+
+                    return;
+                }
+
+
+                /* BARCODE */
+
+                const barcode =
+                    result.barcode ||
+                    product.barcode ||
+                    "-";
+
+                setValue(
+                    "barcodeResult",
+                    barcode
+                );
+
+                setValue(
+                    "barcodeLarge",
+                    barcode
+                );
+
+
+                /* PRODUCT */
+
+                setValue(
+                    "productName",
+                    product.product_name
+                );
+
+                setValue(
+                    "brand",
+                    product.brand
+                );
+
+                setValue(
+                    "category",
+                    product.category
+                );
+
+                setValue(
+                    "netQuantity",
+                    product.net_quantity
+                );
+
+                setValue(
+                    "mrp",
+                    product.mrp !== undefined
+                        ? "₹" + product.mrp
+                        : "-"
+                );
+
+                setValue(
+                    "batchNumber",
+                    product.batch_number
+                );
+
+                setValue(
+                    "manufacturingDate",
+                    product.manufacturing_date
+                );
+
+                setValue(
+                    "expiryDate",
+                    product.expiry_date
+                );
+
+                setValue(
+                    "fssaiLicense",
+                    product.fssai_license
+                );
+
+                setValue(
+                    "consumerCare",
+                    product.consumer_care
+                );
+
+                setValue(
+                    "manufacturer",
+                    product.manufacturer
+                );
+
+                setValue(
+                    "manufacturerAddress",
+                    product.manufacturer_address
+                );
+
+                setValue(
+                    "ingredients",
+                    product.ingredients
+                );
+
+                setValue(
+                    "nutritionInfo",
+                    product.nutrition_info
+                );
+
+                setValue(
+                    "countryOfOrigin",
+                    product.country_of_origin
+                );
+
+
+                /* COMPLIANCE */
+
+                const status =
+                    product.compliance_status ||
+                    "Unknown";
+
+                const statusElement =
+                    document.getElementById(
+                        "complianceStatus"
+                    );
+
+                statusElement.textContent =
+                    status.toUpperCase();
+
+
+                if (
+                    status.toLowerCase() ===
+                    "compliant"
+                ) {
+
+                    statusElement.classList.add(
+                        "status-compliant"
+                    );
+
+                } else {
+
+                    statusElement.classList.add(
+                        "status-non-compliant"
+                    );
+
+                }
+
+            }
+        );
+
+
+        function setValue(
+            id,
+            value
+        ) {
+
+            const element =
+                document.getElementById(id);
+
+            if (!element) {
+                return;
+            }
+
+            if (
+                value === undefined ||
+                value === null ||
+                value === ""
+            ) {
+
+                element.textContent =
+                    "-";
+
+            } else {
+
+                element.textContent =
+                    value;
+
+            }
+
+        }
+
+    </script>
 
 </body>
 
