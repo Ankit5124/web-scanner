@@ -1135,6 +1135,46 @@ footer {
 .product-details span { display: block; color: #5d687a; font-size: 8px; }
 .product-details strong { display: block; color: #d6deea; font-size: 10px; margin-top: 5px; }
 
+/* FULL LABEL DETAILS PANEL */
+
+.details-panel { margin-bottom: 20px; }
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.details-grid > div {
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.details-grid span { display: block; color: #5d687a; font-size: 8px; }
+
+.details-grid strong {
+    display: block;
+    color: #d6deea;
+    font-size: 10px;
+    margin-top: 5px;
+    word-break: break-word;
+}
+
+.details-long {
+    display: grid;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.details-long > div {
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+
+.details-long span { display: block; color: #5d687a; font-size: 8px; margin-bottom: 6px; }
+.details-long p { color: #b7c0d1; font-size: 10px; line-height: 1.7; }
+
 .confidence-number { margin-top: 30px; }
 .confidence-number strong { display: block; font-size: 30px; }
 .confidence-number span { color: #4ade80; font-size: 9px; }
@@ -1248,6 +1288,14 @@ footer {
     background: rgba(245, 158, 11, .08);
 }
 
+.risk-high {
+    color: #f87171;
+    font-size: 7px;
+    padding: 5px 7px;
+    border-radius: 5px;
+    background: rgba(239, 68, 68, .08);
+}
+
 .recommendation-icon {
     width: 40px;
     height: 40px;
@@ -1299,6 +1347,7 @@ footer {
     .scanner-page { grid-template-columns: 1fr; }
     .report-summary { grid-template-columns: 1fr 1fr; }
     .confidence-card { grid-column: 1 / -1; }
+    .details-grid { grid-template-columns: repeat(2, 1fr); }
     .report-bottom { grid-template-columns: 1fr; }
 }
 
@@ -1306,6 +1355,7 @@ footer {
     .stats { grid-template-columns: 1fr; }
     .scan-options { grid-template-columns: 1fr; }
     .checks-grid { grid-template-columns: 1fr; }
+    .details-grid { grid-template-columns: 1fr; }
     .report-summary { grid-template-columns: 1fr; }
     .confidence-card { grid-column: auto; }
     .report-actions { width: 100%; }
