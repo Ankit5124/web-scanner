@@ -65,21 +65,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const scoreDescription = document.getElementById("scoreDescription");
         const stored = localStorage.getItem("complianceReport");
+        let parsed = null;
 
-        if (!stored) {
+        if (stored) {
+            try {
+                parsed = JSON.parse(stored);
+            } catch (error) {
+                parsed = null;
+            }
+        }
+
+        // Anything saved before the backend integration (or malformed) is
+        // schemaVersion 2 with no real product data — never render that.
+        const isRealResult = parsed && parsed.schemaVersion === 2 &&
+            parsed.product && has(parsed.product.product_name);
+
+        if (!isRealResult) {
             if (scoreDescription) {
                 scoreDescription.textContent =
                     "No scan data found. Start a new inspection from the AI Scanner.";
             }
         } else {
-            try {
-                renderReport(JSON.parse(stored));
-            } catch (error) {
-                if (scoreDescription) {
-                    scoreDescription.textContent =
-                        "Could not read the saved report. Please run a new scan.";
-                }
-            }
+            renderReport(parsed);
         }
     }
 
