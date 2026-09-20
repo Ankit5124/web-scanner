@@ -133,6 +133,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ---------- SEND IMAGE TO BACKEND ---------- */
 
+    function extractErrorMessage(data, status) {
+        if (!data) return "Server error (" + status + ")";
+        if (typeof data.detail === "string") return data.detail;
+        if (Array.isArray(data.detail)) {
+            // FastAPI validation errors: [{loc:["body","file"], msg:"field required"}, ...]
+            return data.detail.map(function (d) {
+                return (d.loc ? d.loc.join(".") + ": " : "") + (d.msg || JSON.stringify(d));
+            }).join("; ");
+        }
+        return "Server error (" + status + ")";
+    }
+
     function scanProduct(file) {
 
         const formData = new FormData();
@@ -150,9 +162,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 /* response wasn't JSON */
             }
 
+            console.log("scan-barcode response:", response.status, data);
+
             if (!response.ok) {
-                const detail = (data && data.detail) ? data.detail : ("Server error (" + response.status + ")");
-                throw new Error(detail);
+                throw new Error(extractErrorMessage(data, response.status));
             }
 
             if (!data || data.status !== "found") {
@@ -266,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function saveReport(result) {
 
         const report = {
+            schemaVersion: 2,
             barcode: result.barcode || (result.product && result.product.barcode) || "",
             product: result.product || {},
             image: previewImage ? previewImage.src : "",
