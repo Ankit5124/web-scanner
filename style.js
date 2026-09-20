@@ -247,7 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Product found!";
 
 
-                window.location.replace("result.html?v=" + Date.now());
+                window.location.href =
+                    "result.html";
 
                 return;
             }
