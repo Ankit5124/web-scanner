@@ -98,8 +98,6 @@ body {
     padding: 0 8px 24px;
 
     border-bottom: 1px solid var(--border);
-
-    font-size: 100px;
 }
 
 
@@ -2399,14 +2397,18 @@ tbody tr:hover {
    FINAL RESULT PAGE WIDTH FIX
 ===================================================== */
 
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
 .result-page {
     margin-left: 260px !important;
-    width: auto !important;
+    width: calc(100vw - 260px) !important;
     max-width: none !important;
-    min-height: 100vh;
     padding: 40px !important;
-    box-sizing: border-box;
     overflow-x: hidden;
 }
 
