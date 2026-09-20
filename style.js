@@ -1,309 +1,412 @@
-/* =====================================================
-   COMPLIANCEAI - SHARED UI
-   Loaded by index.html and result.html
-   (scanner logic lives in scanner.js only)
-===================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* -----------------------------------------------
-       ANIMATED STAT NUMBERS (dashboard)
-    ----------------------------------------------- */
+    const camera = document.getElementById("camera");
+    const canvas = document.getElementById("captureCanvas");
 
-    document.querySelectorAll(".stat-content h2").forEach(element => {
+    const captureButton = document.getElementById("captureButton");
+    const stopCameraButton = document.getElementById("stopCameraButton");
 
-        const target = parseFloat(element.dataset.value);
-        if (isNaN(target)) return;
+    const barcodeImageInput =
+        document.getElementById("barcodeImageInput");
 
-        const suffix = element.textContent.trim().endsWith("%") ? "%" : "";
-        const decimals = target % 1 !== 0 ? 1 : 0;
+    const scanStatus =
+        document.getElementById("scanStatus");
 
-        const duration = 1200;
-        const startTime = performance.now();
+    const loading =
+        document.getElementById("loading");
 
-        function animate(time) {
-            const progress = Math.min((time - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            const value = target * eased;
+    const errorMessage =
+        document.getElementById("errorMessage");
 
-            element.textContent = value.toFixed(decimals) + suffix;
 
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                element.textContent = target.toFixed(decimals) + suffix;
-            }
+    // -----------------------------------------
+    // FASTAPI URL
+    // -----------------------------------------
+
+    const API_URL = "http://127.0.0.1:8000";
+
+
+    let cameraStream = null;
+
+
+    // -----------------------------------------
+    // START CAMERA
+    // -----------------------------------------
+
+    async function startCamera() {
+
+        try {
+
+            cameraStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    }
+                },
+                audio: false
+            });
+
+            camera.srcObject = cameraStream;
+
+            scanStatus.textContent =
+                "Camera ready. Point it at the barcode.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            scanStatus.textContent =
+                "Camera could not be started. Use the barcode image option.";
+
         }
 
-        requestAnimationFrame(animate);
-    });
+    }
 
-    /* -----------------------------------------------
-       SIDEBAR NAV
-    ----------------------------------------------- */
 
-    const navLinks = document.querySelectorAll("nav a");
+    // -----------------------------------------
+    // STOP CAMERA
+    // -----------------------------------------
 
-    navLinks.forEach(link => {
-        link.addEventListener("click", function (event) {
-            if (this.getAttribute("href") === "#") {
-                event.preventDefault();
+    function stopCamera() {
+
+        if (cameraStream) {
+
+            cameraStream.getTracks().forEach(track => {
+                track.stop();
+            });
+
+            cameraStream = null;
+        }
+
+        camera.srcObject = null;
+
+        scanStatus.textContent =
+            "Camera stopped.";
+
+    }
+
+
+    // -----------------------------------------
+    // SHOW ERROR
+    // -----------------------------------------
+
+    function showError(message) {
+
+        errorMessage.textContent = message;
+
+        errorMessage.classList.remove("hidden");
+
+    }
+
+
+    // -----------------------------------------
+    // HIDE ERROR
+    // -----------------------------------------
+
+    function hideError() {
+
+        errorMessage.textContent = "";
+
+        errorMessage.classList.add("hidden");
+
+    }
+
+
+    // -----------------------------------------
+    // START LOADING
+    // -----------------------------------------
+
+    function startLoading() {
+
+        loading.classList.remove("hidden");
+
+        captureButton.disabled = true;
+
+        barcodeImageInput.disabled = true;
+
+    }
+
+
+    // -----------------------------------------
+    // STOP LOADING
+    // -----------------------------------------
+
+    function stopLoading() {
+
+        loading.classList.add("hidden");
+
+        captureButton.disabled = false;
+
+        barcodeImageInput.disabled = false;
+
+    }
+
+
+    // -----------------------------------------
+    // SEND IMAGE TO FASTAPI
+    // -----------------------------------------
+
+    async function sendBarcodeImage(blob) {
+
+        hideError();
+
+        startLoading();
+
+        scanStatus.textContent =
+            "Sending barcode image to server...";
+
+
+        const formData = new FormData();
+
+        formData.append(
+            "file",
+            blob,
+            "barcode.jpg"
+        );
+
+
+        try {
+
+            const response = await fetch(
+    `${API_URL}/scan-barcode`,
+    {
+        method: "POST",
+        body: formData
+    }
+);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Server error: ${response.status}`
+                );
+
+            }
+
+
+            const result = await response.json();
+
+            console.log("FastAPI result:", result);
+
+
+            // -----------------------------------------
+            // BARCODE NOT DETECTED
+            // -----------------------------------------
+
+            if (result.status === "barcode_not_detected") {
+
+                showError(
+                    "No barcode detected. Please place the barcode clearly inside the scanner."
+                );
+
+                stopLoading();
+
+                scanStatus.textContent =
+                    "Barcode not detected.";
+
                 return;
             }
-            navLinks.forEach(item => item.classList.remove("active"));
-            this.classList.add("active");
-        });
-    });
 
-    /* -----------------------------------------------
-       RESULT PAGE
-    ----------------------------------------------- */
 
-    const resultScore = document.getElementById("resultScore");
+            // -----------------------------------------
+            // PRODUCT NOT FOUND
+            // -----------------------------------------
 
-    if (resultScore) {
+            if (result.status === "not_found") {
 
-        const scoreDescription = document.getElementById("scoreDescription");
-        const stored = localStorage.getItem("complianceReport");
-        let parsed = null;
+                showError(
+                    `Barcode ${result.barcode} was detected, but this product is not registered in the database.`
+                );
 
-        if (stored) {
-            try {
-                parsed = JSON.parse(stored);
-            } catch (error) {
-                parsed = null;
+                stopLoading();
+
+                scanStatus.textContent =
+                    "Product not found.";
+
+                return;
             }
-        }
 
-        // Anything saved before the backend integration (or malformed) is
-        // schemaVersion 2 with no real product data — never render that.
-        const isRealResult = parsed && parsed.schemaVersion === 2 &&
-            parsed.product && has(parsed.product.product_name);
 
-        if (!isRealResult) {
-            if (scoreDescription) {
-                scoreDescription.textContent =
-                    "No scan data found. Start a new inspection from the AI Scanner.";
+            // -----------------------------------------
+            // PRODUCT FOUND
+            // -----------------------------------------
+
+            if (result.status === "found") {
+
+                localStorage.setItem(
+                    "scanResult",
+                    JSON.stringify(result)
+                );
+
+
+                stopCamera();
+
+
+                scanStatus.textContent =
+                    "Product found!";
+
+
+                window.location.replace("result.html?v=" + Date.now());
+
+                return;
             }
-        } else {
-            renderReport(parsed);
-        }
-    }
 
-    function setText(id, value) {
-        const element = document.getElementById(id);
-        if (!element) return;
-        const text = (value === undefined || value === null || value === "") ? "—" : String(value);
-        element.textContent = text;
-    }
 
-    function has(value) {
-        return value !== undefined && value !== null && String(value).trim() !== "";
-    }
+            // -----------------------------------------
+            // UNKNOWN RESPONSE
+            // -----------------------------------------
 
-    function escapeHtml(value) {
-        return String(value === undefined || value === null ? "" : value).replace(/[&<>"']/g, s => ({
-            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-        }[s]));
-    }
-
-    function formatCurrency(value) {
-        if (!has(value)) return "";
-        return "₹" + value;
-    }
-
-    /* Builds the pass/review/fail list. Expiry is ALWAYS a review
-       item (never a plain pass) since date OCR needs a human check. */
-    function buildChecks(product) {
-
-        const checks = [
-            { label: "Product Name", note: "Commodity name detected", pass: has(product.product_name) },
-            { label: "MRP Declaration", note: "Maximum Retail Price detected", pass: has(product.mrp) },
-            { label: "Net Quantity", note: "Quantity declaration detected", pass: has(product.net_quantity) },
-            { label: "Manufacturer", note: "Manufacturer details detected", pass: has(product.manufacturer) },
-            { label: "Consumer Care", note: "Contact information detected", pass: has(product.consumer_care) },
-            { label: "Country of Origin", note: "Country declaration detected", pass: has(product.country_of_origin) },
-            { label: "Manufacturing Date", note: "Date of manufacture detected", pass: has(product.manufacturing_date) }
-        ].map(c => ({ label: c.label, note: c.note, status: c.pass ? "passed" : "failed" }));
-
-        const expiryPresent = has(product.expiry_date);
-        checks.push({
-            label: "Expiry Information",
-            note: expiryPresent
-                ? "Detected — confirm the date manually before approval"
-                : "Expiry declaration not detected",
-            status: expiryPresent ? "warning" : "failed"
-        });
-
-        return checks;
-    }
-
-    function renderChecks(checks) {
-        const grid = document.getElementById("checksGrid");
-        if (!grid) return;
-
-        grid.innerHTML = checks.map(check => {
-            const icon = check.status === "passed" ? "✓" : check.status === "warning" ? "!" : "✕";
-            const tag = check.status === "passed" ? "PASS" : check.status === "warning" ? "REVIEW" : "FAIL";
-            return (
-                '<div class="check-item ' + check.status + '">' +
-                    '<div class="check-icon">' + icon + '</div>' +
-                    '<div>' +
-                        '<strong>' + escapeHtml(check.label) + '</strong>' +
-                        '<small>' + escapeHtml(check.note) + '</small>' +
-                    '</div>' +
-                    '<span>' + tag + '</span>' +
-                '</div>'
+            throw new Error(
+                "Unexpected response from server."
             );
-        }).join("");
-    }
 
-    function renderChecksCount(passed, total) {
-        const strong = document.querySelector("#checksCount strong");
-        if (strong) strong.textContent = passed + " / " + total;
-    }
 
-    function renderRisks(checks) {
-        const list = document.getElementById("riskList");
-        if (!list) return;
+        } catch (error) {
 
-        const issues = checks.filter(c => c.status !== "passed");
+            console.error(error);
 
-        if (issues.length === 0) {
-            list.innerHTML = '<p class="score-description" style="margin-top:20px;">' +
-                'No issues detected. All mandatory declarations are present.</p>';
-            return;
-        }
-
-        list.innerHTML = issues.map((issue, index) => {
-            const severity = issue.status === "failed" ? "risk-high" : "risk-medium";
-            const tag = issue.status === "failed" ? "HIGH" : "MEDIUM";
-            const verb = issue.status === "failed" ? "missing" : "requires manual review";
-            return (
-                '<div class="risk-item">' +
-                    '<div class="risk-number">' + String(index + 1).padStart(2, "0") + '</div>' +
-                    '<div>' +
-                        '<strong>' + escapeHtml(issue.label) + ' ' + verb + '</strong>' +
-                        '<p>' + escapeHtml(issue.note) + '</p>' +
-                    '</div>' +
-                    '<span class="' + severity + '">' + tag + '</span>' +
-                '</div>'
+            showError(
+                "Could not connect to FastAPI. Make sure the backend is running."
             );
-        }).join("");
+
+            scanStatus.textContent =
+                "Connection failed.";
+
+        } finally {
+
+            stopLoading();
+
+        }
+
     }
 
-    function renderReport(data) {
 
-        const product = data.product || {};
+    // -----------------------------------------
+    // CAPTURE CAMERA IMAGE
+    // -----------------------------------------
 
-        /* top summary */
-        setText("productName", product.product_name);
-        setText("productCategory", [product.brand, product.category].filter(Boolean).join(" · "));
-        setText("mrp", formatCurrency(product.mrp));
-        setText("quantity", product.net_quantity);
-        setText("manufacturer", product.manufacturer);
-        setText("inspectionId", data.inspectionId);
-        setText("matchBarcode", product.barcode || data.barcode);
+    captureButton.addEventListener(
+        "click",
+        () => {
 
-        /* full label details */
-        setText("barcode", product.barcode || data.barcode);
-        setText("brand", product.brand);
-        setText("batchNumber", product.batch_number);
-        setText("fssai", product.fssai_license);
-        setText("mfgDate", product.manufacturing_date);
-        setText("expiryDateField", product.expiry_date);
-        setText("countryOfOrigin", product.country_of_origin);
-        setText("consumerCareDetail", product.consumer_care);
-        setText("manufacturerAddress", product.manufacturer_address);
-        setText("ingredients", product.ingredients);
-        setText("nutritionInfo", product.nutrition_info);
+            hideError();
 
-        /* product image */
-        const resultImage = document.getElementById("resultProductImage");
-        if (resultImage && data.image) {
-            const img = document.createElement("img");
-            img.src = data.image;
-            img.alt = "Scanned product";
-            resultImage.innerHTML = "";
-            resultImage.appendChild(img);
-        }
 
-        /* checks + score */
-        const checks = buildChecks(product);
-        renderChecks(checks);
-        renderChecksCount(
-            checks.filter(c => c.status === "passed").length,
-            checks.length
-        );
-        renderRisks(checks);
+            if (!cameraStream) {
 
-        const passedCount = checks.filter(c => c.status === "passed").length;
-        const failedCount = checks.filter(c => c.status === "failed").length;
-        const reviewCount = checks.filter(c => c.status === "warning").length;
-        const score = Math.round((passedCount / checks.length) * 100);
-        const isCompliant = failedCount === 0;
+                showError(
+                    "Camera is not running."
+                );
 
-        setText("resultScore", score + "%");
-
-        const resultCircle = document.getElementById("resultCircle");
-        if (resultCircle) {
-            const degrees = score * 3.6;
-            const color = isCompliant ? "#22c55e" : "#ef4444";
-            resultCircle.style.background =
-                "conic-gradient(" + color + " 0deg " + degrees + "deg, #202938 " + degrees + "deg 360deg)";
-        }
-
-        const resultStatus = document.getElementById("resultStatus");
-        if (resultStatus) {
-            resultStatus.classList.remove("success", "danger");
-            if (isCompliant) {
-                resultStatus.classList.add("success");
-                resultStatus.innerHTML = "<span>✓</span> COMPLIANT";
-            } else {
-                resultStatus.classList.add("danger");
-                resultStatus.innerHTML = "<span>!</span> NON-COMPLIANT";
+                return;
             }
-        }
 
-        const scoreDescription = document.getElementById("scoreDescription");
-        if (scoreDescription) {
-            if (isCompliant) {
-                scoreDescription.textContent = passedCount + " of " + checks.length +
-                    " mandatory declarations detected." +
-                    (reviewCount ? " " + reviewCount + " item needs manual review." : "");
-            } else {
-                scoreDescription.textContent = failedCount +
-                    " mandatory declaration" + (failedCount === 1 ? "" : "s") +
-                    " missing. Correction required before approval.";
+
+            if (
+                camera.videoWidth === 0 ||
+                camera.videoHeight === 0
+            ) {
+
+                showError(
+                    "Camera is not ready yet."
+                );
+
+                return;
             }
+
+
+            canvas.width =
+                camera.videoWidth;
+
+            canvas.height =
+                camera.videoHeight;
+
+
+            const context =
+                canvas.getContext("2d");
+
+
+            context.drawImage(
+                camera,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            canvas.toBlob(
+                blob => {
+
+                    if (blob) {
+
+                        sendBarcodeImage(blob);
+
+                    } else {
+
+                        showError(
+                            "Could not capture barcode image."
+                        );
+
+                    }
+
+                },
+                "image/jpeg",
+                0.95
+            );
+
         }
-    }
+    );
 
-    /* -----------------------------------------------
-       REPORT BUTTONS
-    ----------------------------------------------- */
 
-    const newScan = document.getElementById("newScan");
-    if (newScan) {
-        newScan.addEventListener("click", () => {
-            window.location.href = "scanner.html";
-        });
-    }
+    // -----------------------------------------
+    // STOP CAMERA BUTTON
+    // -----------------------------------------
 
-    const printReport = document.getElementById("printReport");
-    if (printReport) {
-        printReport.addEventListener("click", () => window.print());
-    }
+    stopCameraButton.addEventListener(
+        "click",
+        stopCamera
+    );
 
-    /* -----------------------------------------------
-       NOTIFICATIONS
-    ----------------------------------------------- */
 
-    const notification = document.querySelector(".notification");
-    if (notification) {
-        notification.addEventListener("click", () => {
-            alert("No new system alerts. All AI services are operational.");
-        });
-    }
+    // -----------------------------------------
+    // IMAGE UPLOAD FALLBACK
+    // -----------------------------------------
+
+    barcodeImageInput.addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            sendBarcodeImage(file);
+
+        }
+    );
+
+
+    // -----------------------------------------
+    // START CAMERA
+    // -----------------------------------------
+
+    startCamera();
+
+
+    // -----------------------------------------
+    // CLEANUP
+    // -----------------------------------------
+
+    window.addEventListener(
+        "beforeunload",
+        stopCamera
+    );
 
 });
