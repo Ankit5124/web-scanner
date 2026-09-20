@@ -2,23 +2,10 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        ComplianceAI - Inspection Report
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComplianceAI - Inspection Report</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 
@@ -32,133 +19,64 @@
     <aside class="sidebar">
 
         <div class="logo">
-
-            <div class="logo-icon">
-                ✓
-            </div>
-
+            <div class="logo-icon">✓</div>
             <div>
-
-                <h2>
-                    Compliance<span>AI</span>
-                </h2>
-
-                <small>
-                    PACKAGED COMMODITIES
-                </small>
-
+                <h2>Compliance<span>AI</span></h2>
+                <small>PACKAGED COMMODITIES</small>
             </div>
-
         </div>
 
-
         <nav>
-
             <a href="index.html">
-
                 <span>▦</span>
-
                 Dashboard
-
             </a>
-
 
             <a href="scanner.html">
-
                 <span>⌾</span>
-
                 AI Scanner
-
             </a>
 
-
-            <a
-                href="result.html"
-                class="active"
-            >
-
+            <a href="result.html" class="active">
                 <span>▤</span>
-
                 Reports
-
             </a>
 
-
             <a href="#">
-
                 <span>◷</span>
-
                 Inspection History
-
             </a>
-
 
             <a href="#">
-
                 <span>⚙</span>
-
                 Settings
-
             </a>
-
         </nav>
 
-
         <div class="system-status">
-
             <div class="status-title">
-
-                <span class="shield">
-                    ◆
-                </span>
-
-                <strong>
-                    System Status
-                </strong>
-
+                <span class="shield">◆</span>
+                <strong>System Status</strong>
             </div>
 
-
             <p>
-
                 <span class="online-dot"></span>
-
                 AI services operational
-
             </p>
-
 
             <div class="status-line"></div>
 
-
             <small>
-
-                Last system check:
-                <b>Just now</b>
-
+                Last system check: <b>Just now</b>
             </small>
-
         </div>
 
-
         <div class="sidebar-footer">
-
-            <div class="ai-mini">
-                AI
-            </div>
-
+            <div class="ai-mini">AI</div>
             <div>
-
-                <strong>
-                    Compliance Engine
-                </strong>
-
-                <small>
-                    v2.4.1
-                </small>
-
+                <strong>Compliance Engine</strong>
+                <small>v2.4.1</small>
             </div>
-
         </div>
 
     </aside>
@@ -169,54 +87,28 @@
 
     <main class="main">
 
-
-        <!-- HEADER -->
-
         <header class="page-header">
 
             <div>
-
                 <div class="breadcrumb">
-
-                    REPORTS
-
-                    <span>/</span>
-
-                    INSPECTION RESULT
-
+                    REPORTS <span>/</span> INSPECTION RESULT
                 </div>
 
-
-                <h1>
-                    Compliance Inspection Report
-                </h1>
-
+                <h1>Compliance Inspection Report</h1>
 
                 <p>
-                    AI-generated packaged commodity
-                    compliance analysis.
+                    Backend-verified packaged commodity compliance analysis.
                 </p>
-
             </div>
 
-
             <div class="report-actions">
-
-                <button
-                    class="secondary-button"
-                    id="newScan"
-                >
+                <button class="secondary-button" id="newScan">
                     + New Inspection
                 </button>
 
-
-                <button
-                    class="primary-report-button"
-                    id="printReport"
-                >
+                <button class="primary-report-button" id="printReport">
                     ↓ Download Report
                 </button>
-
             </div>
 
         </header>
@@ -227,206 +119,175 @@
 
         <section class="report-summary">
 
-
             <!-- SCORE -->
 
             <div class="panel score-card">
 
-                <div class="section-label">
-                    OVERALL RESULT
-                </div>
-
+                <div class="section-label">OVERALL RESULT</div>
 
                 <div class="big-score">
-
-                    <div
-                        class="score-circle"
-                        id="resultCircle"
-                    >
-
+                    <div class="score-circle" id="resultCircle">
                         <div>
-
-                            <strong id="resultScore">
-                                87%
-                            </strong>
-
-                            <small>
-                                COMPLIANCE
-                            </small>
-
+                            <strong id="resultScore">—%</strong>
+                            <small>COMPLIANCE</small>
                         </div>
-
                     </div>
-
                 </div>
 
-
-                <div
-                    class="result-status success"
-                    id="resultStatus"
-                >
-
-                    <span>
-                        ✓
-                    </span>
-
-                    COMPLIANT
-
+                <div class="result-status success" id="resultStatus">
+                    <span>✓</span>
+                    PENDING
                 </div>
 
-
-                <p class="score-description">
-
-                    The product satisfies the majority
-                    of mandatory packaged commodity
-                    declaration requirements.
-
+                <p class="score-description" id="scoreDescription">
+                    Waiting for inspection data.
                 </p>
 
             </div>
-
 
 
             <!-- PRODUCT -->
 
             <div class="panel product-summary">
 
-                <div class="section-label">
-                    PRODUCT INFORMATION
-                </div>
-
+                <div class="section-label">PRODUCT INFORMATION</div>
 
                 <div class="product-header">
-
-                    <div
-                        class="result-product-image"
-                        id="resultProductImage"
-                    >
-
-                        <span>
-                            📦
-                        </span>
-
+                    <div class="result-product-image" id="resultProductImage">
+                        <span>📦</span>
                     </div>
-
 
                     <div>
-
-                        <h2 id="productName">
-                            Premium Packaged Commodity
-                        </h2>
-
-                        <p id="productCategory">
-                            Food & Beverage
-                        </p>
-
+                        <h2 id="productName">—</h2>
+                        <p id="productCategory">—</p>
                     </div>
-
                 </div>
 
-
                 <div class="product-details">
-
                     <div>
-
-                        <span>
-                            MRP
-                        </span>
-
-                        <strong id="mrp">
-                            ₹240
-                        </strong>
-
+                        <span>MRP</span>
+                        <strong id="mrp">—</strong>
                     </div>
 
-
                     <div>
-
-                        <span>
-                            Net Quantity
-                        </span>
-
-                        <strong id="quantity">
-                            1 kg
-                        </strong>
-
+                        <span>Net Quantity</span>
+                        <strong id="quantity">—</strong>
                     </div>
 
-
                     <div>
-
-                        <span>
-                            Manufacturer
-                        </span>
-
-                        <strong id="manufacturer">
-                            ABC Foods Pvt. Ltd.
-                        </strong>
-
+                        <span>Manufacturer</span>
+                        <strong id="manufacturer">—</strong>
                     </div>
 
-
                     <div>
-
-                        <span>
-                            Inspection ID
-                        </span>
-
-                        <strong id="inspectionId">
-                            CAI-2026-00128
-                        </strong>
-
+                        <span>Inspection ID</span>
+                        <strong id="inspectionId">—</strong>
                     </div>
-
                 </div>
 
             </div>
 
 
-
-            <!-- AI CONFIDENCE -->
+            <!-- DATABASE MATCH -->
 
             <div class="panel confidence-card">
 
-                <div class="section-label">
-                    AI CONFIDENCE
-                </div>
-
+                <div class="section-label">DATABASE MATCH</div>
 
                 <div class="confidence-number">
-                    <strong>
-                        94.6%
-                    </strong>
-
-                    <span>
-                        High confidence
-                    </span>
+                    <strong id="matchBarcode">—</strong>
+                    <span>Barcode matched in registry</span>
                 </div>
-
 
                 <div class="confidence-bar">
-
-                    <span
-                        style="width:94.6%"
-                    ></span>
-
+                    <span style="width:100%"></span>
                 </div>
-
 
                 <p>
-                    Computer vision and OCR
-                    extraction confidence.
+                    Product details were retrieved from the compliance
+                    database using the scanned barcode.
                 </p>
 
-
                 <div class="engine-status">
-
                     <span class="online-dot"></span>
-
-                    AI engine verified
-
+                    Backend verified
                 </div>
 
+            </div>
+
+        </section>
+
+
+
+        <!-- FULL LABEL DETAILS -->
+
+        <section class="panel details-panel">
+
+            <div class="panel-header">
+                <div>
+                    <div class="section-label">FULL LABEL DATA</div>
+                    <h2>Product & Regulatory Details</h2>
+                    <p>Everything extracted from the label by the backend.</p>
+                </div>
+            </div>
+
+            <div class="details-grid">
+                <div>
+                    <span>Barcode</span>
+                    <strong id="barcode">—</strong>
+                </div>
+
+                <div>
+                    <span>Brand</span>
+                    <strong id="brand">—</strong>
+                </div>
+
+                <div>
+                    <span>Batch Number</span>
+                    <strong id="batchNumber">—</strong>
+                </div>
+
+                <div>
+                    <span>FSSAI License</span>
+                    <strong id="fssai">—</strong>
+                </div>
+
+                <div>
+                    <span>Manufacturing Date</span>
+                    <strong id="mfgDate">—</strong>
+                </div>
+
+                <div>
+                    <span>Expiry Date</span>
+                    <strong id="expiryDateField">—</strong>
+                </div>
+
+                <div>
+                    <span>Country of Origin</span>
+                    <strong id="countryOfOrigin">—</strong>
+                </div>
+
+                <div>
+                    <span>Consumer Care</span>
+                    <strong id="consumerCareDetail">—</strong>
+                </div>
+            </div>
+
+            <div class="details-long">
+                <div>
+                    <span>Manufacturer Address</span>
+                    <p id="manufacturerAddress">—</p>
+                </div>
+
+                <div>
+                    <span>Ingredients</span>
+                    <p id="ingredients">—</p>
+                </div>
+
+                <div>
+                    <span>Nutrition Information</span>
+                    <p id="nutritionInfo">—</p>
+                </div>
             </div>
 
         </section>
@@ -437,253 +298,21 @@
 
         <section class="panel detection-panel">
 
-
             <div class="panel-header">
-
                 <div>
-
-                    <div class="section-label">
-                        AUTOMATED VALIDATION
-                    </div>
-
-                    <h2>
-                        Compliance Checks
-                    </h2>
-
-                    <p>
-                        Detailed analysis of mandatory
-                        declarations.
-                    </p>
-
+                    <div class="section-label">AUTOMATED VALIDATION</div>
+                    <h2>Compliance Checks</h2>
+                    <p>Detailed analysis of mandatory declarations.</p>
                 </div>
 
-
-                <div class="checks-count">
-
-                    <strong>
-                        7 / 8
-                    </strong>
-
-                    <span>
-                        checks passed
-                    </span>
-
+                <div class="checks-count" id="checksCount">
+                    <strong>— / —</strong>
+                    <span>checks passed</span>
                 </div>
-
             </div>
 
-
-
-            <div class="checks-grid">
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            MRP Declaration
-                        </strong>
-
-                        <small>
-                            Maximum Retail Price detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Net Quantity
-                        </strong>
-
-                        <small>
-                            Quantity declaration detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Manufacturer
-                        </strong>
-
-                        <small>
-                            Manufacturer details detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Consumer Care
-                        </strong>
-
-                        <small>
-                            Contact information detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Country of Origin
-                        </strong>
-
-                        <small>
-                            Country declaration detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Date Declaration
-                        </strong>
-
-                        <small>
-                            Date information detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item passed">
-
-                    <div class="check-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Product Name
-                        </strong>
-
-                        <small>
-                            Commodity name detected
-                        </small>
-
-                    </div>
-
-                    <span>
-                        PASS
-                    </span>
-
-                </div>
-
-
-
-                <div class="check-item warning">
-
-                    <div class="check-icon">
-                        !
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Expiry Information
-                        </strong>
-
-                        <small>
-                            Declaration requires review
-                        </small>
-
-                    </div>
-
-                    <span>
-                        REVIEW
-                    </span>
-
-                </div>
-
-            </div>
+            <!-- Populated by JS from the backend response -->
+            <div class="checks-grid" id="checksGrid"></div>
 
         </section>
 
@@ -693,68 +322,22 @@
 
         <section class="report-bottom">
 
-
             <div class="panel violations-panel">
+                <div class="section-label">RISK ANALYSIS</div>
+                <h2>Detected Issues</h2>
 
-                <div class="section-label">
-                    RISK ANALYSIS
-                </div>
-
-                <h2>
-                    Detected Issues
-                </h2>
-
-
-                <div class="risk-item">
-
-                    <div class="risk-number">
-                        01
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Expiry declaration requires review
-                        </strong>
-
-                        <p>
-                            AI could not confidently verify
-                            the expiry/best-before information.
-                            Manual verification is recommended.
-                        </p>
-
-                    </div>
-
-                    <span class="risk-medium">
-                        MEDIUM
-                    </span>
-
-                </div>
-
+                <!-- Populated by JS from the backend response -->
+                <div id="riskList"></div>
             </div>
 
-
-
             <div class="panel recommendation-panel">
-
-                <div class="section-label">
-                    AI RECOMMENDATION
-                </div>
-
-                <div class="recommendation-icon">
-                    ✦
-                </div>
-
-                <h2>
-                    Manual verification recommended
-                </h2>
-
+                <div class="section-label">AI RECOMMENDATION</div>
+                <div class="recommendation-icon">✦</div>
+                <h2>Manual verification recommended</h2>
                 <p>
-                    Review the expiry declaration before
-                    approving this product for final
-                    compliance clearance.
+                    Confirm any item flagged for review before approving
+                    this product for final compliance clearance.
                 </p>
-
             </div>
 
         </section>
@@ -764,15 +347,8 @@
         <!-- FOOTER -->
 
         <footer>
-
-            <span>
-                © 2026 ComplianceAI
-            </span>
-
-            <span>
-                Report generated by AI Compliance Engine
-            </span>
-
+            <span>© 2026 ComplianceAI</span>
+            <span>Report generated by AI Compliance Engine</span>
         </footer>
 
     </main>
